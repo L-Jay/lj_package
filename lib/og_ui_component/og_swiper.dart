@@ -6,24 +6,30 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 class OGSwiper<T> extends StatefulWidget {
   final List<T> viewModels;
   final SwiperOnTap onTap;
+  final Alignment paginationAlignment;
+  final EdgeInsets paginationPadding;
   final EdgeInsets padding;
   final double connerRadius;
   final double aspectRatio;
   final Color backgroundColor;
   final Shadow shadow;
+  final BoxFit fit;
   final String Function(T t) getImgUrl;
 
-  OGSwiper({
-    Key key,
-    @required List<T> viewModels,
-    @required this.getImgUrl,
-    this.onTap,
-    this.padding = const EdgeInsets.all(0),
-    this.connerRadius = 0,
-    this.aspectRatio = 16 / 9,
-    this.backgroundColor,
-    this.shadow
-  })  : this.viewModels = viewModels ?? [],
+  OGSwiper(
+      {Key key,
+      @required List<T> viewModels,
+      @required this.getImgUrl,
+      this.onTap,
+      this.padding = const EdgeInsets.all(0),
+      this.connerRadius = 0,
+      this.aspectRatio = 16 / 9,
+      this.backgroundColor,
+      this.fit,
+      this.paginationAlignment,
+      this.paginationPadding,
+      this.shadow})
+      : this.viewModels = viewModels ?? [],
         super(key: key);
 
   @override
@@ -58,6 +64,7 @@ class _OGSwiperState<T> extends State<OGSwiper<T>> {
               itemBuilder: (BuildContext context, int index) {
                 return CachedNetworkImage(
                   imageUrl: widget.getImgUrl(widget.viewModels[index]),
+                  fit: widget.fit,
                 );
               },
               onTap: (index) {
@@ -77,9 +84,10 @@ class _OGSwiperState<T> extends State<OGSwiper<T>> {
     return SwiperCustomPagination(
       builder: (BuildContext context, SwiperPluginConfig config) {
         return Align(
-          alignment: Alignment(1, 1),
+          alignment: widget.paginationAlignment ?? Alignment(1, 1),
           child: Padding(
-            padding: const EdgeInsets.only(right: 18, bottom: 14),
+            padding: widget.paginationPadding ??
+                const EdgeInsets.only(right: 18, bottom: 14),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: List.generate(
@@ -102,6 +110,4 @@ class _OGSwiperState<T> extends State<OGSwiper<T>> {
       },
     );
   }
-  
-  
 }
