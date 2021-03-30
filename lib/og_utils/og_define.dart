@@ -85,14 +85,12 @@ Text quickText(String text, double size, Color color, {FontWeight fontWeight}) {
   );
 }
 
-ButtonStyle buttonStyle(
-  double fontSize,
-  Color textColor, {
-  Color backgroundColor,
-  Color borderColor,
-  double borderWidth = 1,
-  FontWeight fontWeight,
-}) {
+ButtonStyle buttonStyle(double fontSize, Color textColor,
+    {Color backgroundColor,
+    Color borderColor,
+    double borderWidth = 1,
+    FontWeight fontWeight,
+    shape}) {
   return ButtonStyle(
     textStyle: MaterialStateProperty.all(
         TextStyle(fontSize: fontSize, fontWeight: fontWeight)),
@@ -102,7 +100,7 @@ ButtonStyle buttonStyle(
         ? MaterialStateProperty.all(
             BorderSide(color: borderColor, width: borderWidth))
         : null,
-    shape: MaterialStateProperty.all(StadiumBorder()),
+    shape: MaterialStateProperty.all(shape ?? StadiumBorder()),
   );
 }
 
@@ -146,8 +144,7 @@ RichText quickRichTextTap(
               fontSize: fontSize,
               color: textColors[index],
             ),
-            recognizer: TapGestureRecognizer()
-              ..onTap = tapCallback[index],
+            recognizer: TapGestureRecognizer()..onTap = tapCallback[index],
           );
         },
       ),
