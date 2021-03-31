@@ -11,6 +11,9 @@ class PermissionUtils {
       List<PermissionGroup> permissionList) async {
     if (Platform.isAndroid) {
       // 申请权限
+      // 申请权限
+      Map<PermissionGroup, PermissionStatus> permissions =
+      await PermissionHandler().requestPermissions(permissionList);
       for (int i = 0; i < permissionList.length; i++) {
         bool granted = await _requestPermissions(permissionList[i]);
         if (!granted) return false;
@@ -20,7 +23,6 @@ class PermissionUtils {
   }
 
   static Future<bool> _requestPermissions(PermissionGroup permission) async {
-    if (Platform.isAndroid) {
 //  申请结果
       PermissionStatus permissionStatus =
           await PermissionHandler().checkPermissionStatus(permission);
@@ -43,6 +45,5 @@ class PermissionUtils {
           }
         }
       }
-    }
   }
 }
