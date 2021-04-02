@@ -74,9 +74,11 @@ Container quickContainer({
   );
 }
 
-Text quickText(String text, double size, Color color, {FontWeight fontWeight}) {
+Text quickText(String text, double size, Color color,
+    {FontWeight fontWeight, TextOverflow overflow}) {
   return Text(
     text,
+    overflow: overflow,
     style: TextStyle(
       fontSize: size,
       color: color,
