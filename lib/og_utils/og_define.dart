@@ -1,8 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:math';
 
 const FontWeight PingFangUltralight = FontWeight.w100;
 const FontWeight PingFangThin = FontWeight.w200;
@@ -75,13 +76,14 @@ Container quickContainer({
 }
 
 Text quickText(String text, double size, Color color,
-    {FontWeight fontWeight, TextOverflow overflow}) {
+    {FontWeight fontWeight, TextOverflow overflow, String fontFamily}) {
   return Text(
     text,
     overflow: overflow,
     style: TextStyle(
       fontSize: size,
       color: color,
+      fontFamily: fontFamily,
       fontWeight: fontWeight,
     ),
   );

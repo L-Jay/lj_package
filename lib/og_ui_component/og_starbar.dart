@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 class StarBar extends StatefulWidget {
@@ -38,12 +36,9 @@ class _StarBarState extends State<StarBar> {
   Widget build(BuildContext context) {
     List<Widget> stars = List.generate(
       widget.total,
-      (index) => Padding(
-        padding: EdgeInsets.only(right: widget.margin),
-        child: _imageItem(
-            index < _currentLevel ? widget.selectedImage : widget.defaultImage,
-            index),
-      ),
+      (index) => _imageItem(
+          index < _currentLevel ? widget.selectedImage : widget.defaultImage,
+          index),
     ).toList();
 
     return Row(
@@ -52,16 +47,23 @@ class _StarBarState extends State<StarBar> {
   }
 
   Widget _imageItem(String name, int index) {
-    if (name == null) return null;
-
-    return GestureDetector(
-      onTap: () {
-        if (widget.canSelect)
-          setState(() {
-            _currentLevel = index + 1;
-          });
-      },
-      child: Image.asset(name),
+    return Padding(
+      padding: EdgeInsets.only(
+          right: name == null ||
+                  (widget.defaultImage == null && _currentLevel == index + 1)
+              ? 0
+              : widget.margin),
+      child: name == null
+          ? null
+          : GestureDetector(
+              onTap: () {
+                if (widget.canSelect)
+                  setState(() {
+                    _currentLevel = index + 1;
+                  });
+              },
+              child: Image.asset(name),
+            ),
     );
   }
 }
