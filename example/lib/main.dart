@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:oralingo_package/og_utils/og_define.dart';
+import 'package:oralingo_package/og_utils/og_network.dart';
 
 void main() {
+  OGNetwork.baseUrl = 'http://apis.juhe.cn';
+  OGNetwork.codeKey = 'error_code';
+  OGNetwork.successCode = 0;
+  OGNetwork.messageKey = 'reason';
+  OGNetwork.handleAllFailureCallBack = (error) {
+
+  };
+  OGNetwork.jsonParse = (data) {
+    return null;
+  };
+
   runApp(MyApp());
 }
 
@@ -94,13 +106,31 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            quickText(text, size, color)
-            Text(
-              'You have pushed the button this many times:',
+            GestureDetector(
+              onTap: () {
+                OGNetwork.post('/xzqh/query',
+                  params: {
+                    'key': 'b0f6256515bfc7ae93ab3a48835bf91d',
+                    'fid': '',
+                  },
+                  successCallback: (data) {
+
+                  },
+                  failureCallback: (error) {
+
+                  }
+                );
+              },
+              child: Text(
+                'network callback test',
+              ),
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline4,
             ),
           ],
         ),
