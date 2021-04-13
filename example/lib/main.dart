@@ -7,9 +7,7 @@ void main() {
   OGNetwork.codeKey = 'error_code';
   OGNetwork.successCode = 0;
   OGNetwork.messageKey = 'reason';
-  OGNetwork.handleAllFailureCallBack = (error) {
-
-  };
+  OGNetwork.handleAllFailureCallBack = (error) {};
   OGNetwork.jsonParse = (data) {
     return null;
   };
@@ -108,29 +106,37 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             GestureDetector(
               onTap: () {
-                OGNetwork.post('/xzqh/query',
-                  params: {
-                    'key': 'b0f6256515bfc7ae93ab3a48835bf91d',
-                    'fid': '',
-                  },
-                  successCallback: (data) {
+                // OGNetwork.post('/xzqh/query', params: {
+                //   'key': 'b0f6256515bfc7ae93ab3a48835bf91d',
+                //   'fid': '',
+                // }, successCallback: (data) {
+                //   print(data);
+                // }, failureCallback: (error) {
+                //   print(error);
+                // });
 
-                  },
-                  failureCallback: (error) {
-
-                  }
-                );
+                OGNetwork.get('http://192.168.0.150:8092/api/student-mobile/studentCarousel/list?appLocation=',
+                    successCallback: (data) {
+                  print(data);
+                }, failureCallback: (error) {
+                  print(error);
+                });
               },
               child: Text(
                 'network callback test',
               ),
             ),
-            Text(
-              '$_counter',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline4,
+            GestureDetector(
+              onTap: () async {
+                var map = await OGNetwork.post('/xzqh/query', params: {
+                  'key': '',
+                  'fid': '',
+                });
+                print(map);
+              },
+              child: Text(
+                'network Future test',
+              ),
             ),
           ],
         ),

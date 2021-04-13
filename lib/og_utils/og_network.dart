@@ -57,31 +57,27 @@ class OGNetwork {
     ));
 
     if (kDebugMode) {
-      dio.interceptors.add(InterceptorsWrapper(
-          onRequest:(options, handler){
-            print("\n================== 请求数据 ==========================");
-            print("url = ${options.uri.toString()}");
-            print("headers = ${options.headers}");
-            print("queryParameters = ${options.queryParameters}");
-            print("params = ${options.data}");
+      dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
+        print("\n================== 请求数据 ==========================");
+        print("url = ${options.uri.toString()}");
+        print("headers = ${options.headers}");
+        print("queryParameters = ${options.queryParameters}");
+        print("params = ${options.data}");
 
-            return handler.next(options);
-          },
-          onResponse:(response,handler) {
-            print("\n================== 响应数据 ==========================");
-            print("code = ${response.statusCode}");
-            print("data = ${response.data}");
-            print("\n");
-            return handler.next(response);
-          },
-          onError: (DioError e, handler) {
-            print("\n================== 错误响应数据 ======================");
-            print("type = ${e.type}");
-            print("message = ${e.message}");
-            print("\n");
-            return  handler.next(e);
-          }
-      ));
+        return handler.next(options);
+      }, onResponse: (response, handler) {
+        print("\n================== 响应数据 ==========================");
+        print("code = ${response.statusCode}");
+        print("data = ${response.data}");
+        print("\n");
+        return handler.next(response);
+      }, onError: (DioError e, handler) {
+        print("\n================== 错误响应数据 ======================");
+        print("type = ${e.type}");
+        print("message = ${e.message}");
+        print("\n");
+        return handler.next(e);
+      }));
     }
 
     return dio;
@@ -96,13 +92,13 @@ class OGNetwork {
   监控网络状态
   context为key，取消监控使用
   */
-  static handleNetworkStatus(dynamic context,
-      OGNetworkStatusCallback callback) {
+  static handleNetworkStatus(
+      dynamic context, OGNetworkStatusCallback callback) {
     // ignore: cancel_subscriptions
     StreamSubscription<ConnectivityResult> _connectivitySubscription =
-    Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
+        Connectivity()
+            .onConnectivityChanged
+            .listen((ConnectivityResult result) {
       networkActive = result != ConnectivityResult.none;
 
       switch (result) {
@@ -132,12 +128,12 @@ class OGNetwork {
   path如果包含http/https,忽略baseUrl
   path作为取消网络请求的标识，如果为空，使用全局取消cancelToken
   * */
-  static get<T>(String path,
+  static Future<T> get<T>(String path,
       {Map<String, dynamic> params,
-        Map<String, dynamic> addHeaders,
-        OGNetworkSuccessCallback<T> successCallback,
-        OGNetworkFailureCallback failureCallback}) async {
-    _request<T>(path,
+      Map<String, dynamic> addHeaders,
+      OGNetworkSuccessCallback<T> successCallback,
+      OGNetworkFailureCallback failureCallback}) async {
+    return _request<T>(path,
         isGet: true,
         params: params,
         addHeaders: addHeaders,
@@ -150,13 +146,13 @@ class OGNetwork {
   path如果包含http/https,忽略baseUrl
   path作为取消网络请求的标识，如果为空，使用全局取消cancelToken
   * */
-  static post<T>(String path,
+  static Future<T> post<T>(String path,
       {Map<String, dynamic> params,
-        dynamic data,
-        Map<String, dynamic> addHeaders,
-        OGNetworkSuccessCallback<T> successCallback,
-        OGNetworkFailureCallback failureCallback}) async {
-    _request<T>(path,
+      dynamic data,
+      Map<String, dynamic> addHeaders,
+      OGNetworkSuccessCallback<T> successCallback,
+      OGNetworkFailureCallback failureCallback}) async {
+    return _request<T>(path,
         isPost: true,
         params: params,
         data: data,
@@ -165,13 +161,13 @@ class OGNetwork {
         failureCallback: failureCallback);
   }
 
-  static put<T>(String path,
+  static Future<T> put<T>(String path,
       {Map<String, dynamic> params,
-        dynamic data,
-        Map<String, dynamic> addHeaders,
-        OGNetworkSuccessCallback<T> successCallback,
-        OGNetworkFailureCallback failureCallback}) async {
-    _request<T>(path,
+      dynamic data,
+      Map<String, dynamic> addHeaders,
+      OGNetworkSuccessCallback<T> successCallback,
+      OGNetworkFailureCallback failureCallback}) async {
+    return _request<T>(path,
         isPut: true,
         params: params,
         data: data,
@@ -185,13 +181,13 @@ class OGNetwork {
   path如果包含http/https,忽略baseUrl
   path作为取消网络请求的标识，如果为空，使用全局取消cancelToken
   * */
-  static delete<T>(String path,
+  static Future<T> delete<T>(String path,
       {Map<String, dynamic> params,
-        dynamic data,
-        Map<String, dynamic> addHeaders,
-        OGNetworkSuccessCallback<T> successCallback,
-        OGNetworkFailureCallback failureCallback}) async {
-    _request<T>(
+      dynamic data,
+      Map<String, dynamic> addHeaders,
+      OGNetworkSuccessCallback<T> successCallback,
+      OGNetworkFailureCallback failureCallback}) async {
+    return _request<T>(
       path,
       params: params,
       data: data,
@@ -202,7 +198,8 @@ class OGNetwork {
     );
   }
 
-  static _request<T>(String path, {
+  static Future<T> _request<T>(
+    String path, {
     bool isPost = false,
     bool isGet = false,
     bool isDelete = false,
@@ -223,6 +220,8 @@ class OGNetwork {
     //   failureCallback?.call((OGNetworkError(444, '网络异常，请检查网络设置')));
     //   return;
     // }
+
+    Completer completer = Completer<T>();
 
     NetworkHistoryModel historyModel = NetworkHistoryModel();
 
@@ -300,39 +299,46 @@ class OGNetwork {
       Map responseData = {};
       if (response.data is String)
         responseData = jsonDecode(response.data);
-      else if (response.data is Map)
-        responseData = response.data;
+      else if (response.data is Map) responseData = response.data;
 
       int code = responseData[codeKey];
 
       /*请求数据成功*/
       if (code == null || code == successCode) {
-        if (successCallback != null) {
-          if (T == dynamic) {
-            successCallback(response.data);
-          } else {
-            successCallback(jsonParse(response.data));
-          }
+        if (T == dynamic) {
+          successCallback?.call(response.data);
+          completer.complete(response.data);
+        } else {
+          T t = jsonParse(response.data);
+          successCallback?.call(t);
+          completer.complete(t);
         }
       } else {
         /*请求数据发生错误*/
-        failureCallback
-            ?.call((OGNetworkError(code, response.data[messageKey])));
+        OGNetworkError error = OGNetworkError(code, response.data[messageKey]);
 
-        handleAllFailureCallBack
-            ?.call((OGNetworkError(code, response.data[messageKey])));
+        failureCallback?.call(error);
+
+        handleAllFailureCallBack?.call(error);
+
+        completer.complete(error);
       }
     } on DioError catch (error) {
-      int errorCode = error.response?.data is Map ? error.response.data[codeKey] : null;
-      String message = error.response?.data is Map ? error.response.data[messageKey] : null;
+      OGNetworkError finalError;
+      int errorCode =
+          error.response?.data is Map ? error.response.data[codeKey] : null;
+      String message =
+          error.response?.data is Map ? error.response.data[messageKey] : null;
 
       if (errorCode != null && message != null) {
         historyModel.errorCode = errorCode?.toString();
         historyModel.errorMsg = message;
 
-        failureCallback?.call((OGNetworkError(errorCode, message)));
+        finalError = OGNetworkError(errorCode, message);
 
-        handleAllFailureCallBack?.call((OGNetworkError(errorCode, message)));
+        failureCallback?.call(finalError);
+
+        handleAllFailureCallBack?.call(finalError);
       } else {
         switch (error.type) {
           case DioErrorType.connectTimeout:
@@ -351,13 +357,15 @@ class OGNetwork {
             break;
 
           case DioErrorType.cancel:
-          // TODO: Handle this case.
+            // TODO: Handle this case.
             break;
         }
         /*请求数据发生错误*/
-        failureCallback?.call((OGNetworkError(errorCode, message)));
+        finalError = OGNetworkError(errorCode, message);
 
-        handleAllFailureCallBack?.call((OGNetworkError(errorCode, message)));
+        failureCallback?.call(finalError);
+
+        handleAllFailureCallBack?.call(finalError);
 
         historyModel.responseHeaders = error.response?.headers?.map;
         historyModel.errorCode = error.response?.statusCode?.toString();
@@ -365,7 +373,11 @@ class OGNetwork {
 
         if (kDebugMode) historyList.insert(0, historyModel);
       }
+
+      completer.complete(finalError);
     }
+
+    return completer.future;
   }
 
   static Future download({
@@ -376,11 +388,11 @@ class OGNetwork {
   }) {
     return dio
         .download(
-      url,
-      savePath,
-      onReceiveProgress: onReceiveProgress,
-      options: Options(receiveTimeout: 5 * 60 * 1000),
-    )
+          url,
+          savePath,
+          onReceiveProgress: onReceiveProgress,
+          options: Options(receiveTimeout: 5 * 60 * 1000),
+        )
         .catchError(error);
   }
 
