@@ -11,7 +11,7 @@ typedef OGNetworkSuccessCallback<T> = void Function(T data);
 /*请求失败回调*/
 typedef OGNetworkFailureCallback = void Function(OGNetworkError error);
 
-typedef OGNetworkJsonParse<T> = T Function(dynamic data);
+typedef OGNetworkJsonParse<T> = T Function<T>(dynamic data);
 
 typedef OGNetworkStatusCallback = void Function(OGNetworkStatus status);
 
@@ -309,7 +309,7 @@ class OGNetwork {
           successCallback?.call(response.data);
           completer.complete(response.data);
         } else {
-          T t = jsonParse(response.data);
+          T t = jsonParse<T>(response.data);
           successCallback?.call(t);
           completer.complete(t);
         }
