@@ -128,7 +128,7 @@ class OGNetwork {
   path如果包含http/https,忽略baseUrl
   path作为取消网络请求的标识，如果为空，使用全局取消cancelToken
   * */
-  static Future<T> get<T>(String path,
+  static Future<dynamic> get<T>(String path,
       {Map<String, dynamic> params,
       Map<String, dynamic> addHeaders,
       OGNetworkSuccessCallback<T> successCallback,
@@ -146,7 +146,7 @@ class OGNetwork {
   path如果包含http/https,忽略baseUrl
   path作为取消网络请求的标识，如果为空，使用全局取消cancelToken
   * */
-  static Future<T> post<T>(String path,
+  static Future<dynamic> post<T>(String path,
       {Map<String, dynamic> params,
       dynamic data,
       Map<String, dynamic> addHeaders,
@@ -161,7 +161,7 @@ class OGNetwork {
         failureCallback: failureCallback);
   }
 
-  static Future<T> put<T>(String path,
+  static Future<dynamic> put<T>(String path,
       {Map<String, dynamic> params,
       dynamic data,
       Map<String, dynamic> addHeaders,
@@ -181,7 +181,7 @@ class OGNetwork {
   path如果包含http/https,忽略baseUrl
   path作为取消网络请求的标识，如果为空，使用全局取消cancelToken
   * */
-  static Future<T> delete<T>(String path,
+  static Future<dynamic> delete<T>(String path,
       {Map<String, dynamic> params,
       dynamic data,
       Map<String, dynamic> addHeaders,
@@ -198,7 +198,7 @@ class OGNetwork {
     );
   }
 
-  static Future<T> _request<T>(
+  static Future<dynamic> _request<T>(
     String path, {
     bool isPost = false,
     bool isGet = false,
@@ -221,7 +221,7 @@ class OGNetwork {
     //   return;
     // }
 
-    Completer completer = Completer<T>();
+    Completer completer = Completer<dynamic>();
 
     NetworkHistoryModel historyModel = NetworkHistoryModel();
 
