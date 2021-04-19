@@ -33,6 +33,13 @@ class _StarBarState extends State<StarBar> {
   }
 
   @override
+  void didUpdateWidget(StarBar oldWidget) {
+    _currentLevel = widget.level;
+    
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<Widget> stars = List.generate(
       widget.total,
