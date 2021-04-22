@@ -13,6 +13,7 @@ class OGSwiper<T> extends StatefulWidget {
   final double aspectRatio;
   final Color backgroundColor;
   final Shadow shadow;
+  final int imageType;
   final BoxFit fit;
   final String Function(T t) getImgUrl;
 
@@ -26,6 +27,7 @@ class OGSwiper<T> extends StatefulWidget {
       this.aspectRatio = 16 / 9,
       this.backgroundColor,
       this.fit,
+      this.imageType = 0,
       this.paginationAlignment,
       this.paginationPadding,
       this.shadow})
@@ -62,10 +64,15 @@ class _OGSwiperState<T> extends State<OGSwiper<T>> {
               loop: widget.viewModels.length > 1,
               itemCount: widget.viewModels.length,
               itemBuilder: (BuildContext context, int index) {
-                return CachedNetworkImage(
-                  imageUrl: widget.getImgUrl(widget.viewModels[index]),
-                  fit: widget.fit,
-                );
+                return widget.imageType == 1
+                    ? Image.asset(
+                        widget.getImgUrl(widget.viewModels[index]),
+                        fit: widget.fit,
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: widget.getImgUrl(widget.viewModels[index]),
+                        fit: widget.fit,
+                      );
               },
               onTap: (index) {
                 widget.onTap?.call(index);
