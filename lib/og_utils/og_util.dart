@@ -29,6 +29,9 @@ class OGUtil {
       preferredCameraDevice: userFront ? CameraDevice.front : CameraDevice.rear,
     );
 
+    if (file == null)
+      return null;
+
     if (crop == null || !crop)
       return file.path;
     else

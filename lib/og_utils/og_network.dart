@@ -69,6 +69,7 @@ class OGNetwork {
         print("\n================== 响应数据 ==========================");
         print("code = ${response.statusCode}");
         print("data = ${response.data}");
+        print('json = ${json.encode(response.data)}');
         print("\n");
         return handler.next(response);
       }, onError: (DioError e, handler) {
