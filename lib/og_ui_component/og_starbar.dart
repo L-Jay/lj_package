@@ -7,6 +7,7 @@ class StarBar extends StatefulWidget {
   final String defaultImage;
   final bool canSelect;
   final double margin;
+  final Function(int level) callback;
 
   const StarBar({
     Key key,
@@ -16,6 +17,7 @@ class StarBar extends StatefulWidget {
     this.canSelect = false,
     this.margin = 10,
     this.total = 5,
+    this.callback,
   }) : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class _StarBarState extends State<StarBar> {
   @override
   void didUpdateWidget(StarBar oldWidget) {
     _currentLevel = widget.level;
-    
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -67,6 +69,8 @@ class _StarBarState extends State<StarBar> {
                 if (widget.canSelect)
                   setState(() {
                     _currentLevel = index + 1;
+                    if (widget?.callback != null)
+                      widget.callback(_currentLevel);
                   });
               },
               child: Image.asset(name),

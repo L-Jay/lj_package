@@ -6,6 +6,9 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import 'og_permission.dart';
 
 class OGUtil {
   static SharedPreferences preferences;
@@ -24,6 +27,11 @@ class OGUtil {
     bool crop,
     bool userFront = false,
   }) async {
+    bool permissionStorage =
+    await PermissionUtils.permissionStorage(
+        [PermissionGroup.storage, PermissionGroup.camera]);
+    if(!permissionStorage)
+      return null;
     PickedFile file = await ImagePicker().getImage(
       source: useCamera ? ImageSource.camera : ImageSource.gallery,
       preferredCameraDevice: userFront ? CameraDevice.front : CameraDevice.rear,
