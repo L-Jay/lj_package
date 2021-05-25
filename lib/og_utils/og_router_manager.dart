@@ -21,24 +21,22 @@ class RouterManager {
   /*获取登录结果*/
   static String loginPageRouteName;
 
+  static Future<bool> Function(BuildContext context) doLogin;
+
   static pushNamed<T>(
       BuildContext context,
       String routeName, {
         Object arguments,
         ObjectCallback<T> popCallback,
-      }) {
+      }) async {
     if (verifyLoginPageList.contains(routeName) && !getLoginStatus()) {
-      Navigator.pushNamed(context, loginPageRouteName).then((success) {
-       if (success == null)
-         return;
-
-        if (success)
-          Navigator.pushNamed(context, routeName, arguments: arguments)
-              .then((value) {
-            popCallback?.call(value);
-            globalPopCallback?.call();
-          });
-      });
+      bool loginResult = await doLogin(context);
+      if (loginResult != null && loginResult)
+        Navigator.pushNamed(context, routeName, arguments: arguments)
+            .then((value) {
+          popCallback?.call(value);
+          globalPopCallback?.call();
+        });
     } else {
       Navigator.pushNamed(context, routeName, arguments: arguments)
           .then((value) {

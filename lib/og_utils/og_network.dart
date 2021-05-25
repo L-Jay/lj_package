@@ -67,6 +67,7 @@ class OGNetwork {
         return handler.next(options);
       }, onResponse: (response, handler) {
         print("\n================== 响应数据 ==========================");
+        print("path = ${response.realUri.path}");
         print("code = ${response.statusCode}");
         print("data = ${response.data}");
         print('json = ${json.encode(response.data)}');
