@@ -4,6 +4,7 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:oralingo_package/og_utils/og_event_bus.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -14,11 +15,13 @@ class OGUtil {
   static SharedPreferences preferences;
   static PackageInfo packageInfo;
   static DeviceInfoPlugin deviceInfo;
+  static EventBus eventBus;
 
   static Future<bool> initInstance() async {
     preferences = await SharedPreferences.getInstance();
     packageInfo = await PackageInfo.fromPlatform();
     deviceInfo = DeviceInfoPlugin();
+    eventBus = EventBus();
     return true;
   }
 
