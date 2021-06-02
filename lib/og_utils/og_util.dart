@@ -30,11 +30,18 @@ class OGUtil {
     bool crop,
     bool userFront = false,
   }) async {
-    bool permissionStorage =
-    await PermissionUtils.permissionStorage(
-        [PermissionGroup.storage, PermissionGroup.camera]);
-    if(!permissionStorage)
+    bool permission = await PermissionUtils.checkStorage();
+    if (!permission)
       return null;
+    
+    if (useCamera)
+      permission = await PermissionUtils.checkCamera();
+    else
+      permission = await PermissionUtils.checkPhotos();
+
+    if (!permission)
+      return null;
+
     PickedFile file = await ImagePicker().getImage(
       source: useCamera ? ImageSource.camera : ImageSource.gallery,
       preferredCameraDevice: userFront ? CameraDevice.front : CameraDevice.rear,
@@ -49,8 +56,7 @@ class OGUtil {
       return await cropImage(file.path);
   }
 
-  static Future<String> cropImage(
-    String imagePath, {
+  static Future<String> cropImage(String imagePath, {
     double ratioX = 1,
     double ratioY = 1,
   }) async {
