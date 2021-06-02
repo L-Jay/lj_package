@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:oralingo_package/og_utils/og_event_bus.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'og_permission.dart';
 
