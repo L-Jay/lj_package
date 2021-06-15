@@ -41,7 +41,7 @@ class PermissionUtils {
 
   static Future<bool> checkMicrophone() async {
     if (Platform.isAndroid)
-      return true;
+      await _requestForAndroid(PermissionGroup.microphone);
     PermissionStatus status = await PermissionHandler()
         .checkPermissionStatus(PermissionGroup.microphone);
     if (status == PermissionStatus.granted)

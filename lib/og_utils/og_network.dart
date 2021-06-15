@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:oralingo_package/og_utils/og_util.dart';
 
 /*请求成功回调*/
 typedef OGNetworkSuccessCallback<T> = void Function(T data);
@@ -347,15 +348,15 @@ class OGNetwork {
           case DioErrorType.receiveTimeout:
           case DioErrorType.sendTimeout:
             errorCode = 504;
-            message = '网络连接超时，请检查网络设置';
+            message = OGUtil.isEnglish ? 'Network exception' : '网络连接超时，请检查网络设置';
             break;
           case DioErrorType.response:
             errorCode = 404;
-            message = '服务器异常，请稍后重试！';
+            message = OGUtil.isEnglish ? 'Network exception' : '服务器异常，请稍后重试！';
             break;
           case DioErrorType.other:
             errorCode = 500;
-            message = '网络异常，请稍后重试！';
+            message = OGUtil.isEnglish ? 'Network exception' : '网络异常，请稍后重试！';
             break;
 
           case DioErrorType.cancel:

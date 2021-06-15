@@ -15,6 +15,7 @@ class OGUtil {
   static PackageInfo packageInfo;
   static DeviceInfoPlugin deviceInfo;
   static EventBus eventBus;
+  static bool isEnglish = false;
 
   static Future<bool> initInstance() async {
     preferences = await SharedPreferences.getInstance();
@@ -30,24 +31,21 @@ class OGUtil {
     bool userFront = false,
   }) async {
     bool permission = await PermissionUtils.checkStorage();
-    if (!permission)
-      return null;
-    
+    if (!permission) return null;
+
     if (useCamera)
       permission = await PermissionUtils.checkCamera();
     else
       permission = await PermissionUtils.checkPhotos();
 
-    if (!permission)
-      return null;
+    if (!permission) return null;
 
     PickedFile file = await ImagePicker().getImage(
       source: useCamera ? ImageSource.camera : ImageSource.gallery,
       preferredCameraDevice: userFront ? CameraDevice.front : CameraDevice.rear,
     );
 
-    if (file == null)
-      return null;
+    if (file == null) return null;
 
     if (crop == null || !crop)
       return file.path;
@@ -55,7 +53,8 @@ class OGUtil {
       return await cropImage(file.path);
   }
 
-  static Future<String> cropImage(String imagePath, {
+  static Future<String> cropImage(
+    String imagePath, {
     double ratioX = 1,
     double ratioY = 1,
   }) async {
@@ -69,7 +68,7 @@ class OGUtil {
       //   CropAspectRatioPreset.square,
       // ],
       androidUiSettings: AndroidUiSettings(
-        toolbarTitle: "剪裁",
+        toolbarTitle: isEnglish ? 'Tailoring' : "剪裁",
         toolbarColor: Colors.transparent,
         // toolbarWidgetColor: Colors.transparent,
         // initAspectRatio: CropAspectRatioPreset.original,
@@ -81,9 +80,9 @@ class OGUtil {
       compressQuality: 100,
       cropStyle: CropStyle.rectangle,
       iosUiSettings: IOSUiSettings(
-        title: '剪裁',
-        cancelButtonTitle: '取消',
-        doneButtonTitle: '完成',
+        title: isEnglish ? 'Tailoring' : '剪裁',
+        cancelButtonTitle: isEnglish ? 'Cancel' : '取消',
+        doneButtonTitle: isEnglish ? 'Complete' : '完成',
       ),
     );
 
