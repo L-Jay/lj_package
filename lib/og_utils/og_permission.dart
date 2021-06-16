@@ -21,7 +21,7 @@ class PermissionUtils {
   }
 
   static Future<bool> checkCamera() async {
-    if (Platform.isAndroid)
+    // if (Platform.isAndroid)
       await _requestForAndroid(PermissionGroup.camera);
     PermissionStatus status =
     await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
@@ -32,6 +32,7 @@ class PermissionUtils {
   static Future<bool> checkPhotos() async {
     if (Platform.isAndroid)
       return true;
+    await _requestForAndroid(PermissionGroup.photos);
     PermissionStatus status =
     await PermissionHandler().checkPermissionStatus(PermissionGroup.photos);
     if (status == PermissionStatus.granted) return true;
