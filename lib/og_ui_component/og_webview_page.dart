@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -40,7 +41,7 @@ class _OGWebViewPageState extends State<OGWebViewPage> {
       onWebViewCreated: (controller) {
         _webViewController = controller;
       },
-      onPageStarted: (String url) {
+      onPageStarted: (String url) async {
         // Utils.showLoading();
         print('开始加载$url');
       },
@@ -58,6 +59,12 @@ class _OGWebViewPageState extends State<OGWebViewPage> {
         print('加载失败' + error.failingUrl + error.description);
       },
       navigationDelegate: (NavigationRequest request) async {
+        String url = request.url;
+        if (url != null &&
+            !(url.startsWith("http:") || url.startsWith("https:"))) {
+          await launch(url); //use url launcher plugin
+          return NavigationDecision.prevent;
+        }
         return NavigationDecision.navigate;
       },
       javascriptChannels: <JavascriptChannel>[].toSet(),

@@ -82,7 +82,7 @@ class OGUtil {
       iosUiSettings: IOSUiSettings(
         title: isEnglish ? 'Tailoring' : '剪裁',
         cancelButtonTitle: isEnglish ? 'Cancel' : '取消',
-        doneButtonTitle: isEnglish ? 'Complete' : '完成',
+        doneButtonTitle: isEnglish ? 'Done' : '完成',
       ),
     );
 
