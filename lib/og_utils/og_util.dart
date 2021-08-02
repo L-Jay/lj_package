@@ -21,8 +21,8 @@ class OGUtil {
   static Future<bool> initInstance() async {
     preferences = await SharedPreferences.getInstance();
     packageInfo = await PackageInfo.fromPlatform();
-    androidDeviceInfo = await DeviceInfoPlugin().androidInfo;
-    iosDeviceInfo = await DeviceInfoPlugin().iosInfo;
+    androidDeviceInfo = Platform.isIOS ? null : await DeviceInfoPlugin().androidInfo;
+    iosDeviceInfo = Platform.isIOS ? await DeviceInfoPlugin().iosInfo : null;
     eventBus = EventBus();
     return true;
   }
