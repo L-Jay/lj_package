@@ -13,14 +13,16 @@ import 'og_permission.dart';
 class OGUtil {
   static SharedPreferences preferences;
   static PackageInfo packageInfo;
-  static DeviceInfoPlugin deviceInfo;
+  static AndroidDeviceInfo androidDeviceInfo;
+  static IosDeviceInfo iosDeviceInfo;
   static EventBus eventBus;
   static bool isEnglish = false;
 
   static Future<bool> initInstance() async {
     preferences = await SharedPreferences.getInstance();
     packageInfo = await PackageInfo.fromPlatform();
-    deviceInfo = DeviceInfoPlugin();
+    androidDeviceInfo = await DeviceInfoPlugin().androidInfo;
+    iosDeviceInfo = await DeviceInfoPlugin().iosInfo;
     eventBus = EventBus();
     return true;
   }
