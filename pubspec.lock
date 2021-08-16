@@ -153,6 +153,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.2"
+  flutter_json_widget:
+    dependency: "direct main"
+    description:
+      name: flutter_json_widget
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.2"
   flutter_page_indicator:
     dependency: transitive
     description:
