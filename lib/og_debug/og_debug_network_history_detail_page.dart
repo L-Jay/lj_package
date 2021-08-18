@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_json_widget/flutter_json_widget.dart';
 import 'package:oralingo_package/og_utils/og_network.dart';
 
@@ -24,6 +25,18 @@ class _DebugNetworkHistoryDetailPageState
       backgroundColor: Color(0xFFF7F8F9),
       appBar: AppBar(
         title: Text(widget.historyModel.title),
+        actions: [
+          IconButton(
+              icon: Icon(
+                Icons.file_copy,
+              ),
+              onPressed: () {
+                setState(() {
+                  String value = widget.historyModel.toString();
+                  Clipboard.setData(ClipboardData(text: value));
+                });
+              }),
+        ],
       ),
       body: ListView(
         children: [

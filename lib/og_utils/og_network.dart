@@ -450,4 +450,29 @@ class NetworkHistoryModel {
   String jsonResult;
   String errorCode;
   String errorMsg;
+
+  @override
+  String toString() {
+    return '{' +
+        '"title":"' +
+        (title ?? '') +
+        '","url":"' +
+        (url ?? '') +
+        '","method":"' +
+        (method ?? '') +
+        '","headers":"' +
+        (headers?.toString() ?? '') +
+        '","params":"' +
+        (params?.toString() ?? '') +
+        '","responseHeaders":"' +
+        (responseHeaders?.toString() ?? '') +
+        '","jsonResult":' +
+        (jsonResult ?? '') +
+        ',"errorCode":"' +
+        (errorCode ?? '') +
+        '","errorMsg":"' +
+        (errorMsg ?? '') +
+        '"' +
+        '}';
+  }
 }
