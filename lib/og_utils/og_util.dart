@@ -21,12 +21,14 @@ class OGUtil {
   static Future<bool> initInstance() async {
     preferences = await SharedPreferences.getInstance();
     packageInfo = await PackageInfo.fromPlatform();
-    androidDeviceInfo = Platform.isIOS ? null : await DeviceInfoPlugin().androidInfo;
+    androidDeviceInfo =
+        Platform.isIOS ? null : await DeviceInfoPlugin().androidInfo;
     iosDeviceInfo = Platform.isIOS ? await DeviceInfoPlugin().iosInfo : null;
     eventBus = EventBus();
     return true;
   }
 
+   static ImagePicker _picker = ImagePicker();
   static Future<String> pickerImage({
     bool useCamera = true,
     bool crop,
@@ -42,10 +44,14 @@ class OGUtil {
 
     if (!permission) return null;
 
-    PickedFile file = await ImagePicker().getImage(
-      source: useCamera ? ImageSource.camera : ImageSource.gallery,
+    XFile file = await _picker.pickImage(
+      source:  useCamera ? ImageSource.camera : ImageSource.gallery,
       preferredCameraDevice: userFront ? CameraDevice.front : CameraDevice.rear,
     );
+    // PickedFile file = await ImagePicker.platform.pickImage(
+    //   source: useCamera ? ImageSource.camera : ImageSource.gallery,
+    //   preferredCameraDevice: userFront ? CameraDevice.front : CameraDevice.rear,
+    // );
 
     if (file == null) return null;
 
