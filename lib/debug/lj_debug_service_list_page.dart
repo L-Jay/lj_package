@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:oralingo_package/og_debug/og_debug_config.dart';
-import 'package:oralingo_package/og_utils/og_define.dart';
+import 'package:lj_package/utils/lj_define.dart';
+
+import 'lj_debug_config.dart';
 
 class DebugServiceListPage extends StatefulWidget {
   @override
@@ -9,7 +10,7 @@ class DebugServiceListPage extends StatefulWidget {
 }
 
 class _DebugServiceListPageState extends State<DebugServiceListPage> {
-  String debug_host = 'debug_host';
+  String debugHost = 'debug_host';
   final TextEditingController _textEditingController = TextEditingController();
 
   @override
@@ -37,15 +38,15 @@ class _DebugServiceListPageState extends State<DebugServiceListPage> {
 
   Widget _buildListView() {
     return ListView.separated(
-      itemCount: OGDebugConfig.configList?.length ?? 0,
+      itemCount: LJDebugConfig.configList?.length ?? 0,
       itemBuilder: (BuildContext context, int index) {
-        Map service = OGDebugConfig.configList[index];
+        Map service = LJDebugConfig.configList[index];
 
         return GestureDetector(
           onTap: () {
-            OGDebugConfig.debugIndex = index;
-            if (OGDebugConfig.debugServiceChangeCallback != null)
-              OGDebugConfig.debugServiceChangeCallback(index, service);
+            LJDebugConfig.debugIndex = index;
+            if (LJDebugConfig.debugServiceChangeCallback != null)
+              LJDebugConfig.debugServiceChangeCallback(index, service);
             setState(() {});
           },
           child: Container(
@@ -82,7 +83,7 @@ class _DebugServiceListPageState extends State<DebugServiceListPage> {
                         .toList(),
                   ),
                 ),
-                if (OGDebugConfig.debugIndex == index)
+                if (LJDebugConfig.debugIndex == index)
                   Icon(
                     Icons.done,
                     color: Color(0xFF1BA3FF),
@@ -149,11 +150,11 @@ class _DebugServiceListPageState extends State<DebugServiceListPage> {
 
               // _list.add(_textEditingController.text);
 
-              // OGNetwork.baseUrl = _textEditingController.text;
-              // OGNetwork.dio.options.baseUrl = OGNetwork.baseUrl;
+              // LJNetwork.baseUrl = _textEditingController.text;
+              // LJNetwork.dio.options.baseUrl = LJNetwork.baseUrl;
               // // AppConfigManager.sharedPreferences
               // //     .setString(debug_host, DDNetwork.baseUrl);
-              // OGUtil.preferences.setString(debug_host, OGNetwork.baseUrl);
+              // LJUtil.preferences.setString(debug_host, LJNetwork.baseUrl);
               setState(() {});
             },
             child: Container(

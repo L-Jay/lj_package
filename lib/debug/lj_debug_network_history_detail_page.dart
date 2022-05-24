@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_json_widget/flutter_json_widget.dart';
-import 'package:oralingo_package/og_utils/og_network.dart';
+import 'package:lj_package/utils/lj_network.dart';
 
 class DebugNetworkHistoryDetailPage extends StatefulWidget {
   final NetworkHistoryModel historyModel;

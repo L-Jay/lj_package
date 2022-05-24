@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
-import 'og_define.dart';
+import 'lj_define.dart';
 
 class RouterManager {
   static GlobalKey<NavigatorState> navigatorKey =

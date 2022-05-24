@@ -1,9 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
-class OGSwiper<T> extends StatefulWidget {
+class LJSwiper<T> extends StatefulWidget {
   final List<T> viewModels;
   final SwiperOnTap onTap;
   final Alignment paginationAlignment;
@@ -17,7 +16,7 @@ class OGSwiper<T> extends StatefulWidget {
   final BoxFit fit;
   final String Function(T t) getImgUrl;
 
-  OGSwiper(
+  LJSwiper(
       {Key key,
       @required List<T> viewModels,
       @required this.getImgUrl,
@@ -35,10 +34,10 @@ class OGSwiper<T> extends StatefulWidget {
         super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _OGSwiperState<T>();
+  State<StatefulWidget> createState() => _LJSwiperState<T>();
 }
 
-class _OGSwiperState<T> extends State<OGSwiper<T>> {
+class _LJSwiperState<T> extends State<LJSwiper<T>> {
   List<T> get list => widget.viewModels;
 
   @override

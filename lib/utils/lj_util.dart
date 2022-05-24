@@ -4,13 +4,13 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:oralingo_package/og_utils/og_event_bus.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'og_permission.dart';
+import 'lj_event_bus.dart';
+import 'lj_permission.dart';
 
-class OGUtil {
+class LJUtil {
   static SharedPreferences preferences;
   static PackageInfo packageInfo;
   static AndroidDeviceInfo androidDeviceInfo;

@@ -2,7 +2,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class OGNetworkImage extends StatelessWidget {
+class LJNetworkImage extends StatelessWidget {
   final double width;
   final double height;
   final double radius;
@@ -11,7 +11,7 @@ class OGNetworkImage extends StatelessWidget {
 
   final BoxFit fit;
 
-  const OGNetworkImage({
+  const LJNetworkImage({
     Key key,
     this.width,
     this.height,

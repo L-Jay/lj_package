@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 const FontWeight PingFangUltralight = FontWeight.w100;
 const FontWeight PingFangThin = FontWeight.w200;

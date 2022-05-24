@@ -1,8 +1,8 @@
-name: oralingo_package
-description: Oralingo package.
+name: lj_package
+description: L-Jay flutter package.
 version: 0.0.1
 author: 崔志伟
-homepage: https://codeup.aliyun.com/603ef0576802dbc46efde6f9/OralingoPackage
+homepage: https://github.com/L-Jay/lj_package
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -19,7 +19,7 @@ dependencies:
   package_info: ^2.0.0
   device_info: ^2.0.0
   shared_preferences: ^2.0.5
-  permission_handler: ^3.2.0
+  permission_handler: ^9.2.0
   dio: ^4.0.0
   connectivity: ^3.0.3
   webview_flutter: ^2.0.7

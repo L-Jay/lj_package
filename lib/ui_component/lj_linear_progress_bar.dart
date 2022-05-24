@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class GradientLinearProgressBar extends StatelessWidget {
   final double strokeWidth; //画笔的宽度，其实是进度条的高度
@@ -19,7 +18,7 @@ class GradientLinearProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     var _colors = colors;
     if (_colors == null) {
-      Color color = Theme.of(context).accentColor;
+      Color color = Theme.of(context).colorScheme.secondary;
       _colors = [color, color];
     }
     return CustomPaint(

@@ -1,20 +1,19 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:oralingo_package/og_utils/og_define.dart';
+import 'package:lj_package/utils/lj_define.dart';
+import 'lj_debug_page.dart';
 
-import 'og_debug_page.dart';
-
-typedef OGDebugServiceChangeCallback = void Function(int debugIndex, Map<
+typedef LJDebugServiceChangeCallback = void Function(int debugIndex, Map<
     String,
     String> map);
 
-class OGDebugConfig {
+class LJDebugConfig {
   static List<Map<String, String>> configList;
 
   static int debugIndex = 0; // 测试版-index
   static bool debugState = false; // 测试版-true   正式版-false
 
-  static OGDebugServiceChangeCallback debugServiceChangeCallback;
+  static LJDebugServiceChangeCallback debugServiceChangeCallback;
 
   static OverlayEntry entry;
 
@@ -45,7 +44,7 @@ class OGDebugConfig {
           child: GestureDetector(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => OGDebugPage()));
+                  MaterialPageRoute(builder: (context) => LJDebugPage()));
             },
             child: Container(
               alignment: Alignment.center,

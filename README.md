@@ -1,6 +1,6 @@
-# oralingo_package
+# lj_package
 
-Oralingo package.
+L-Jay package.
 
 ## Getting Started
 

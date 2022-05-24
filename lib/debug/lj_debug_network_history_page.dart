@@ -1,10 +1,7 @@
 
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:oralingo_package/og_utils/og_network.dart';
-
-import 'og_debug_network_history_detail_page.dart';
+import 'package:lj_package/utils/lj_network.dart';
+import 'lj_debug_network_history_detail_page.dart';
 
 class DebugNetworkHistoryPage extends StatefulWidget {
   @override
@@ -26,7 +23,7 @@ class _DebugNetworkHistoryPageState extends State<DebugNetworkHistoryPage> {
               ),
               onPressed: () {
                 setState(() {
-                  OGNetwork.historyList.clear();
+                  LJNetwork.historyList.clear();
                 });
               }),
         ],
@@ -37,9 +34,9 @@ class _DebugNetworkHistoryPageState extends State<DebugNetworkHistoryPage> {
 
   Widget _buildListView() {
     return ListView.separated(
-      itemCount: OGNetwork.historyList.length,
+      itemCount: LJNetwork.historyList.length,
       itemBuilder: (BuildContext context, int index) {
-        NetworkHistoryModel model = OGNetwork.historyList[index];
+        NetworkHistoryModel model = LJNetwork.historyList[index];
 
         return GestureDetector(
           onTap: () {

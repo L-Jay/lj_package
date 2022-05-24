@@ -1,27 +1,26 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class OGWebViewPage extends StatefulWidget {
+class LJWebViewPage extends StatefulWidget {
   final String url;
 
-  OGWebViewPage(this.url);
+  LJWebViewPage(this.url);
 
   @override
-  _OGWebViewPageState createState() => _OGWebViewPageState(url);
+  _LJWebViewPageState createState() => _LJWebViewPageState(url);
 }
 
-class _OGWebViewPageState extends State<OGWebViewPage> {
+class _LJWebViewPageState extends State<LJWebViewPage> {
   String _url;
   String _title;
   bool _canBack = false;
   bool _canForward = false;
 
-  _OGWebViewPageState(this._url);
+  _LJWebViewPageState(this._url);
 
   WebViewController _webViewController;
 

@@ -1,16 +1,15 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'og_debug_network_history_page.dart';
-import 'og_debug_service_list_page.dart';
+import 'lj_debug_network_history_page.dart';
+import 'lj_debug_service_list_page.dart';
 
-class OGDebugPage extends StatefulWidget {
+class LJDebugPage extends StatefulWidget {
   @override
-  _OGDebugPageState createState() => _OGDebugPageState();
+  _LJDebugPageState createState() => _LJDebugPageState();
 }
 
-class _OGDebugPageState extends State<OGDebugPage> {
+class _LJDebugPageState extends State<LJDebugPage> {
   List<String> _titles = [
     '服务器地址',
     '网络请求历史',

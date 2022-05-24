@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:oralingo_package/oralingo_package.dart';
+import 'package:lj_package/lj_package.dart';
 
 void main() {
   test('adds one to input values', () {

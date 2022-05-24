@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:oralingo_package/og_utils/og_define.dart';
-import 'package:oralingo_package/og_utils/og_network.dart';
+import 'package:lj_package/utils/lj_network.dart';
 
 void main() {
-  OGNetwork.baseUrl = 'http://apis.juhe.cn';
-  OGNetwork.codeKey = 'error_code';
-  OGNetwork.successCode = 0;
-  OGNetwork.messageKey = 'reason';
-  OGNetwork.handleAllFailureCallBack = (error) {};
-  OGNetwork.jsonParse = (data) {
+  LJNetwork.baseUrl = 'http://apis.juhe.cn';
+  LJNetwork.codeKey = 'error_code';
+  LJNetwork.successCode = 0;
+  LJNetwork.messageKey = 'reason';
+  LJNetwork.handleAllFailureCallBack = (error) {};
+  LJNetwork.jsonParse = <T>(data) {
     return null;
   };
 
@@ -106,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             GestureDetector(
               onTap: () {
-                // OGNetwork.post('/xzqh/query', params: {
+                // LJNetwork.post('/xzqh/query', params: {
                 //   'key': 'b0f6256515bfc7ae93ab3a48835bf91d',
                 //   'fid': '',
                 // }, successCallback: (data) {
@@ -115,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 //   print(error);
                 // });
 
-                OGNetwork.get('http://192.168.0.150:8092/api/student-mobile/studentCarousel/list?appLocation=',
+                LJNetwork.get('http://192.168.0.150:8092/api/student-mobile/studentCarousel/list?appLocation=',
                     successCallback: (data) {
                   print(data);
                 }, failureCallback: (error) {
@@ -128,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             GestureDetector(
               onTap: () async {
-                var map = await OGNetwork.post('/xzqh/query', params: {
+                var map = await LJNetwork.post('/xzqh/query', params: {
                   'key': '',
                   'fid': '',
                 });

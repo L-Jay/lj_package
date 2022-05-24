@@ -4,21 +4,22 @@ import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:oralingo_package/og_utils/og_util.dart';
+
+import 'lj_util.dart';
 
 /*请求成功回调*/
-typedef OGNetworkSuccessCallback<T> = void Function(T data);
+typedef LJNetworkSuccessCallback<T> = void Function(T data);
 
 /*请求失败回调*/
-typedef OGNetworkFailureCallback = void Function(OGNetworkError error);
+typedef LJNetworkFailureCallback = void Function(LJNetworkError error);
 
-typedef OGNetworkJsonParse<T> = T Function<T>(dynamic data);
+typedef LJNetworkJsonParse<T> = T Function<T>(dynamic data);
 
-typedef OGNetworkStatusCallback = void Function(OGNetworkStatus status);
+typedef LJNetworkStatusCallback = void Function(LJNetworkStatus status);
 
-enum OGNetworkStatus { wifi, mobile, none }
+enum LJNetworkStatus { wifi, mobile, none }
 
-class OGNetwork {
+class LJNetwork {
   /*baseUrl*/
   static String baseUrl;
 
@@ -38,9 +39,9 @@ class OGNetwork {
   static String messageKey;
 
   /*捕获全部请求错误*/
-  static OGNetworkFailureCallback handleAllFailureCallBack;
+  static LJNetworkFailureCallback handleAllFailureCallBack;
 
-  static OGNetworkJsonParse jsonParse;
+  static LJNetworkJsonParse jsonParse;
 
   /*全局CancelToken*/
   static CancelToken _globalCancelToken = CancelToken();
@@ -96,7 +97,7 @@ class OGNetwork {
   context为key，取消监控使用
   */
   static handleNetworkStatus(
-      dynamic context, OGNetworkStatusCallback callback) {
+      dynamic context, LJNetworkStatusCallback callback) {
     // ignore: cancel_subscriptions
     StreamSubscription<ConnectivityResult> _connectivitySubscription =
         Connectivity()
@@ -106,13 +107,13 @@ class OGNetwork {
 
       switch (result) {
         case ConnectivityResult.wifi:
-          callback(OGNetworkStatus.wifi);
+          callback(LJNetworkStatus.wifi);
           break;
         case ConnectivityResult.mobile:
-          callback(OGNetworkStatus.mobile);
+          callback(LJNetworkStatus.mobile);
           break;
         case ConnectivityResult.none:
-          callback(OGNetworkStatus.none);
+          callback(LJNetworkStatus.none);
           break;
       }
     });
@@ -134,8 +135,8 @@ class OGNetwork {
   static Future<dynamic> get<T>(String path,
       {Map<String, dynamic> params,
       Map<String, dynamic> addHeaders,
-      OGNetworkSuccessCallback<T> successCallback,
-      OGNetworkFailureCallback failureCallback}) async {
+      LJNetworkSuccessCallback<T> successCallback,
+      LJNetworkFailureCallback failureCallback}) async {
     return _request<T>(path,
         isGet: true,
         params: params,
@@ -153,8 +154,8 @@ class OGNetwork {
       {Map<String, dynamic> params,
       dynamic data,
       Map<String, dynamic> addHeaders,
-      OGNetworkSuccessCallback<T> successCallback,
-      OGNetworkFailureCallback failureCallback}) async {
+      LJNetworkSuccessCallback<T> successCallback,
+      LJNetworkFailureCallback failureCallback}) async {
     return _request<T>(path,
         isPost: true,
         params: params,
@@ -168,8 +169,8 @@ class OGNetwork {
       {Map<String, dynamic> params,
       dynamic data,
       Map<String, dynamic> addHeaders,
-      OGNetworkSuccessCallback<T> successCallback,
-      OGNetworkFailureCallback failureCallback}) async {
+      LJNetworkSuccessCallback<T> successCallback,
+      LJNetworkFailureCallback failureCallback}) async {
     return _request<T>(path,
         isPut: true,
         params: params,
@@ -188,8 +189,8 @@ class OGNetwork {
       {Map<String, dynamic> params,
       dynamic data,
       Map<String, dynamic> addHeaders,
-      OGNetworkSuccessCallback<T> successCallback,
-      OGNetworkFailureCallback failureCallback}) async {
+      LJNetworkSuccessCallback<T> successCallback,
+      LJNetworkFailureCallback failureCallback}) async {
     return _request<T>(
       path,
       params: params,
@@ -210,8 +211,8 @@ class OGNetwork {
     Map<String, dynamic> params,
     dynamic data,
     Map<String, dynamic> addHeaders,
-    OGNetworkSuccessCallback<T> successCallback,
-    OGNetworkFailureCallback failureCallback,
+    LJNetworkSuccessCallback<T> successCallback,
+    LJNetworkFailureCallback failureCallback,
   }) async {
     // 未获取网络状态初次获取
     // if (networkActive == null) {
@@ -220,7 +221,7 @@ class OGNetwork {
     // }
     //
     // if (!networkActive) {
-    //   failureCallback?.call((OGNetworkError(444, '网络异常，请检查网络设置')));
+    //   failureCallback?.call((LJNetworkError(444, '网络异常，请检查网络设置')));
     //   return;
     // }
 
@@ -318,7 +319,7 @@ class OGNetwork {
         }
       } else {
         /*请求数据发生错误*/
-        OGNetworkError error = OGNetworkError(code, response.data[messageKey]);
+        LJNetworkError error = LJNetworkError(code, response.data[messageKey]);
 
         failureCallback?.call(error);
 
@@ -327,7 +328,7 @@ class OGNetwork {
         completer.complete(error);
       }
     } on DioError catch (error) {
-      OGNetworkError finalError;
+      LJNetworkError finalError;
       int errorCode =
           error.response?.data is Map ? error.response.data[codeKey] : null;
       String message =
@@ -337,7 +338,7 @@ class OGNetwork {
         historyModel.errorCode = errorCode?.toString();
         historyModel.errorMsg = message;
 
-        finalError = OGNetworkError(errorCode, message);
+        finalError = LJNetworkError(errorCode, message);
 
         failureCallback?.call(finalError);
 
@@ -348,15 +349,15 @@ class OGNetwork {
           case DioErrorType.receiveTimeout:
           case DioErrorType.sendTimeout:
             errorCode = 504;
-            message = OGUtil.isEnglish ? 'Network exception' : '网络连接超时，请检查网络设置';
+            message = LJUtil.isEnglish ? 'Network exception' : '网络连接超时，请检查网络设置';
             break;
           case DioErrorType.response:
             errorCode = 404;
-            message = OGUtil.isEnglish ? 'Network exception' : '服务器异常，请稍后重试！';
+            message = LJUtil.isEnglish ? 'Network exception' : '服务器异常，请稍后重试！';
             break;
           case DioErrorType.other:
             errorCode = 500;
-            message = OGUtil.isEnglish ? 'Network exception' : '网络异常，请稍后重试！';
+            message = LJUtil.isEnglish ? 'Network exception' : '网络异常，请稍后重试！';
             break;
 
           case DioErrorType.cancel:
@@ -364,7 +365,7 @@ class OGNetwork {
             break;
         }
         /*请求数据发生错误*/
-        finalError = OGNetworkError(errorCode, message);
+        finalError = LJNetworkError(errorCode, message);
 
         failureCallback?.call(finalError);
 
@@ -433,8 +434,8 @@ class OGNetwork {
   static List<NetworkHistoryModel> historyList = [];
 }
 
-class OGNetworkError {
-  OGNetworkError(this.errorCode, this.errorMessage);
+class LJNetworkError {
+  LJNetworkError(this.errorCode, this.errorMessage);
 
   int errorCode;
   String errorMessage;
