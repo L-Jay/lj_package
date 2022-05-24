@@ -1,16 +1,8 @@
+import 'package:example/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:lj_package/utils/lj_network.dart';
 
 void main() {
-  LJNetwork.baseUrl = 'http://apis.juhe.cn';
-  LJNetwork.codeKey = 'error_code';
-  LJNetwork.successCode = 0;
-  LJNetwork.messageKey = 'reason';
-  LJNetwork.handleAllFailureCallBack = (error) {};
-  LJNetwork.jsonParse = <T>(data) {
-    return null;
-  };
-
   runApp(MyApp());
 }
 
@@ -19,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'lj_package Demo',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -31,8 +23,11 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
+        primaryColor: Colors.white,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: HomePage(),
     );
   }
 }
@@ -105,21 +100,21 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             GestureDetector(
               onTap: () {
-                // LJNetwork.post('/xzqh/query', params: {
-                //   'key': 'b0f6256515bfc7ae93ab3a48835bf91d',
-                //   'fid': '',
-                // }, successCallback: (data) {
-                //   print(data);
-                // }, failureCallback: (error) {
-                //   print(error);
-                // });
-
-                LJNetwork.get('http://192.168.0.150:8092/api/student-mobile/studentCarousel/list?appLocation=',
-                    successCallback: (data) {
+                LJNetwork.post('/xzqh/query', params: {
+                  'key': 'b0f6256515bfc7ae93ab3a48835bf91d',
+                  'fid': '',
+                }, successCallback: (data) {
                   print(data);
                 }, failureCallback: (error) {
                   print(error);
                 });
+
+                // LJNetwork.get('http://192.168.0.150:8092/api/student-mobile/studentCarousel/list?appLocation=',
+                //     successCallback: (data) {
+                //   print(data);
+                // }, failureCallback: (error) {
+                //   print(error);
+                // });
               },
               child: Text(
                 'network callback test',
@@ -128,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
             GestureDetector(
               onTap: () async {
                 var map = await LJNetwork.post('/xzqh/query', params: {
-                  'key': '',
+                  'key': 'b0f6256515bfc7ae93ab3a48835bf91d',
                   'fid': '',
                 });
                 print(map);

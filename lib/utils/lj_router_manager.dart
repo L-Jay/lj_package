@@ -16,8 +16,6 @@ class RouterManager {
 
   /*获取登录状态*/
   static bool Function() getLoginStatus;
-  /*获取登录结果*/
-  static String loginPageRouteName;
 
   static Future<bool> Function(BuildContext context) doLogin;
 
