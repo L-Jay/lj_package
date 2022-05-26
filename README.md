@@ -42,6 +42,23 @@ LJNetwork.handleAllFailureCallBack = (error) {
 LJNetwork.jsonParse = <T>(data) {
   return JsonConvert.fromJsonAsT<T>(data);
 };
+
+// 回调请求
+LJNetwork.post('/xxx',
+params: {
+    'key1': 'value1',
+    'key2': 'value2',
+}, successCallback: (data) {
+    print(data);
+}, failureCallback: (error) {
+    print(error);
+});
+
+// await请求
+T data = await LJNetwork.post<T>('/xxx', params: {
+    'id': 'xxx',
+});
+print(data);
 ```
 
 ## 路由配置
