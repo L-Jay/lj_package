@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +7,8 @@ class LJNetworkImage extends StatelessWidget {
   final double radius;
 
   final String url;
+  final String placeholderImageName;
+  final Color placeholderColor;
 
   final BoxFit fit;
 
@@ -16,8 +17,10 @@ class LJNetworkImage extends StatelessWidget {
     this.width,
     this.height,
     this.url,
+    this.placeholderImageName,
+    this.placeholderColor,
     this.radius = 0,
-    this.fit = BoxFit.fill,
+    this.fit = BoxFit.cover,
   }) : super(key: key);
 
   @override
@@ -30,9 +33,14 @@ class LJNetworkImage extends StatelessWidget {
         width: width,
         height: height,
         placeholder: (context, url) {
-          return Container(
-            color: Color(0xFFF5F6F6),
-          );
+          return placeholderImageName == null
+              ? Container(
+                  color: placeholderColor ?? Color(0xFFF5F6F6),
+                )
+              : Image.asset(
+                  placeholderImageName,
+                  fit: fit,
+                );
         },
       ),
     );
