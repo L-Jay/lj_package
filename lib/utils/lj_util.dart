@@ -28,7 +28,8 @@ class LJUtil {
     return true;
   }
 
-   static ImagePicker _picker = ImagePicker();
+  static ImagePicker _picker = ImagePicker();
+
   static Future<String> pickerImage({
     bool useCamera = true,
     bool crop,
@@ -45,7 +46,7 @@ class LJUtil {
     if (!permission) return null;
 
     XFile file = await _picker.pickImage(
-      source:  useCamera ? ImageSource.camera : ImageSource.gallery,
+      source: useCamera ? ImageSource.camera : ImageSource.gallery,
       preferredCameraDevice: userFront ? CameraDevice.front : CameraDevice.rear,
     );
     // PickedFile file = await ImagePicker.platform.pickImage(
@@ -66,7 +67,7 @@ class LJUtil {
     double ratioX = 1,
     double ratioY = 1,
   }) async {
-    File croppedFile = await ImageCropper.cropImage(
+    CroppedFile croppedFile = await ImageCropper().cropImage(
       sourcePath: imagePath,
       aspectRatio: CropAspectRatio(
         ratioX: ratioX,
@@ -75,23 +76,25 @@ class LJUtil {
       // aspectRatioPresets: [
       //   CropAspectRatioPreset.square,
       // ],
-      androidUiSettings: AndroidUiSettings(
-        toolbarTitle: isEnglish ? 'Tailoring' : "剪裁",
-        toolbarColor: Colors.transparent,
-        // toolbarWidgetColor: Colors.transparent,
-        // initAspectRatio: CropAspectRatioPreset.original,
-        lockAspectRatio: true,
-        hideBottomControls: true,
-        cropGridRowCount: 0,
-        cropGridColumnCount: 0,
-      ),
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: isEnglish ? 'Tailoring' : "剪裁",
+          toolbarColor: Colors.transparent,
+          // toolbarWidgetColor: Colors.transparent,
+          // initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: true,
+          hideBottomControls: true,
+          cropGridRowCount: 0,
+          cropGridColumnCount: 0,
+        ),
+        IOSUiSettings(
+          title: isEnglish ? 'Tailoring' : '剪裁',
+          cancelButtonTitle: isEnglish ? 'Cancel' : '取消',
+          doneButtonTitle: isEnglish ? 'Done' : '完成',
+        ),
+      ],
       compressQuality: 100,
       cropStyle: CropStyle.rectangle,
-      iosUiSettings: IOSUiSettings(
-        title: isEnglish ? 'Tailoring' : '剪裁',
-        cancelButtonTitle: isEnglish ? 'Cancel' : '取消',
-        doneButtonTitle: isEnglish ? 'Done' : '完成',
-      ),
     );
 
     return croppedFile.path;
