@@ -12,18 +12,18 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cached_network_image: ^3.2.1
+  cached_network_image: ^2.5.0
   flutter_swiper: ^1.1.6
-  image_picker: ^0.8.5+3
+  image_picker: ^0.8.4
   image_cropper: ^2.0.3
-  package_info: ^2.0.2
-  device_info: ^2.0.3
-  shared_preferences: ^2.0.15
-  permission_handler: ^10.0.0
+  package_info: ^2.0.0
+  device_info: ^2.0.0
+  shared_preferences: ^2.0.5
+  permission_handler: ^9.2.0
   dio: ^4.0.0
-  connectivity: ^3.0.6
-  webview_flutter: ^3.0.4
-  url_launcher: ^6.1.4
+  connectivity: ^3.0.3
+  webview_flutter: ^2.0.7
+  url_launcher: ^6.0.6
   flutter_json_widget: ^1.0.2
 
 dev_dependencies:
