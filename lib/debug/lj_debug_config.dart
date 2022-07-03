@@ -8,16 +8,16 @@ typedef LJDebugServiceChangeCallback = void Function(int debugIndex, Map<
     String> map);
 
 class LJDebugConfig {
-  static List<Map<String, String>> configList;
+  static List<Map<String, String>>? configList;
 
   static int debugIndex = 0; // 测试版-index
   static bool debugState = false; // 测试版-true   正式版-false
 
-  static LJDebugServiceChangeCallback debugServiceChangeCallback;
+  static LJDebugServiceChangeCallback? debugServiceChangeCallback;
 
-  static OverlayEntry entry;
+  static OverlayEntry? entry;
 
-  static void addOverlay(BuildContext context, String title) {
+  static void addOverlay(BuildContext context, {String title = 'LJ'}) {
     removeOverlay();
     WidgetsBinding.instance
         .addPostFrameCallback((_) => _insertOverlay(context, title));
@@ -33,7 +33,6 @@ class LJDebugConfig {
       final size = MediaQuery
           .of(context)
           .size;
-      print(size.width);
       return Positioned(
         width: 56,
         height: 56,
@@ -50,12 +49,12 @@ class LJDebugConfig {
               alignment: Alignment.center,
               decoration:
               BoxDecoration(shape: BoxShape.circle, color: Colors.black38),
-              child: quickText(title ?? '', 18, Colors.white),
+              child: quickText(title, 18, Colors.white),
             ),
           ),
         ),
       );
     });
-    return Overlay.of(context).insert(entry);
+    return Overlay.of(context)?.insert(entry!);
   }
 }

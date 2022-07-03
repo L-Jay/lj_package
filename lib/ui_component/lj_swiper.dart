@@ -1,25 +1,25 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_swiper_null_safety_flutter3/flutter_swiper_null_safety_flutter3.dart';
 
 class LJSwiper<T> extends StatefulWidget {
   final List<T> viewModels;
-  final SwiperOnTap onTap;
-  final Alignment paginationAlignment;
-  final EdgeInsets paginationPadding;
+  final SwiperOnTap? onTap;
+  final Alignment? paginationAlignment;
+  final EdgeInsets? paginationPadding;
   final EdgeInsets padding;
   final double connerRadius;
   final double aspectRatio;
-  final Color backgroundColor;
-  final Shadow shadow;
+  final Color? backgroundColor;
+  final BoxShadow? shadow;
   final int imageType;
-  final BoxFit fit;
+  final BoxFit? fit;
   final String Function(T t) getImgUrl;
 
   LJSwiper(
-      {Key key,
-      @required List<T> viewModels,
-      @required this.getImgUrl,
+      {Key? key,
+      required this.viewModels,
+      required this.getImgUrl,
       this.onTap,
       this.padding = const EdgeInsets.all(0),
       this.connerRadius = 0,
@@ -30,8 +30,7 @@ class LJSwiper<T> extends StatefulWidget {
       this.paginationAlignment,
       this.paginationPadding,
       this.shadow})
-      : this.viewModels = viewModels ?? [],
-        super(key: key);
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _LJSwiperState<T>();
@@ -52,7 +51,7 @@ class _LJSwiperState<T> extends State<LJSwiper<T>> {
             borderRadius: BorderRadius.circular(widget.connerRadius),
             boxShadow: widget.shadow != null
                 ? [
-                    widget.shadow,
+                    widget.shadow!,
                   ]
                 : null,
           ),

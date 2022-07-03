@@ -1,38 +1,40 @@
+
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'lj_event_bus.dart';
 import 'lj_permission.dart';
 
 class LJUtil {
-  static SharedPreferences preferences;
-  static PackageInfo packageInfo;
-  static AndroidDeviceInfo androidDeviceInfo;
-  static IosDeviceInfo iosDeviceInfo;
-  static EventBus eventBus;
+  static late SharedPreferences preferences;
+  static late PackageInfo packageInfo;
+  static AndroidDeviceInfo? androidDeviceInfo;
+  static IosDeviceInfo? iosDeviceInfo;
+  static late EventBus eventBus;
   static bool isEnglish = false;
 
   static Future<bool> initInstance() async {
     preferences = await SharedPreferences.getInstance();
     packageInfo = await PackageInfo.fromPlatform();
-    androidDeviceInfo =
-        Platform.isIOS ? null : await DeviceInfoPlugin().androidInfo;
-    iosDeviceInfo = Platform.isIOS ? await DeviceInfoPlugin().iosInfo : null;
+
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    androidDeviceInfo = Platform.isAndroid ? await deviceInfo.androidInfo : null;
+    iosDeviceInfo =Platform.isIOS ? await deviceInfo.iosInfo : null;
     eventBus = EventBus();
     return true;
   }
 
   static ImagePicker _picker = ImagePicker();
 
-  static Future<String> pickerImage({
+  static Future<String?> pickerImage({
     bool useCamera = true,
-    bool crop,
+    bool? crop,
     bool userFront = false,
   }) async {
     bool permission = await PermissionUtils.checkStorage();
@@ -45,7 +47,7 @@ class LJUtil {
 
     if (!permission) return null;
 
-    XFile file = await _picker.pickImage(
+    XFile? file = await _picker.pickImage(
       source: useCamera ? ImageSource.camera : ImageSource.gallery,
       preferredCameraDevice: userFront ? CameraDevice.front : CameraDevice.rear,
     );
@@ -62,12 +64,12 @@ class LJUtil {
       return await cropImage(file.path);
   }
 
-  static Future<String> cropImage(
+  static Future<String?> cropImage(
     String imagePath, {
     double ratioX = 1,
     double ratioY = 1,
   }) async {
-    CroppedFile croppedFile = await ImageCropper().cropImage(
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: imagePath,
       aspectRatio: CropAspectRatio(
         ratioX: ratioX,
@@ -97,6 +99,6 @@ class LJUtil {
       cropStyle: CropStyle.rectangle,
     );
 
-    return croppedFile.path;
+    return croppedFile?.path;
   }
 }

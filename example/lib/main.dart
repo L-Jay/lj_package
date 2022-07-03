@@ -1,4 +1,5 @@
-import 'package:example/home_page.dart';
+
+import 'package:LJPackage/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:lj_package/utils/lj_network.dart';
 

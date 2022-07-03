@@ -19,23 +19,23 @@ typedef ObjectCallbackResultN<T, N> = N Function(T value);
 typedef CallbackResultN<N> = N Function();
 
 Container quickContainer({
-  double width,
-  double height,
-  AlignmentGeometry alignment,
-  Color color,
-  String backgroundImage,
-  EdgeInsets margin,
-  EdgeInsets padding,
-  Widget child,
-  double circular,
-  BoxShadow boxShadow,
-  List<Color> gradientColors,
+  double? width,
+  double? height,
+  AlignmentGeometry? alignment,
+  Color? color,
+  String? backgroundImage,
+  EdgeInsets? margin,
+  EdgeInsets? padding,
+  Widget? child,
+  double? circular,
+  BoxShadow? boxShadow,
+  List<Color>? gradientColors,
   List<AlignmentGeometry> gradientAlign = const [
     Alignment.centerLeft,
     Alignment.centerRight,
   ],
-  Color borderColor,
-  double borderWidth,
+  Color? borderColor,
+  double borderWidth = 0,
 }) {
   return Container(
     width: width,
@@ -49,25 +49,25 @@ Container quickContainer({
       image: backgroundImage == null
           ? null
           : DecorationImage(
-              fit: BoxFit.fill,
-              image: AssetImage(
-                backgroundImage,
-              ),
-            ),
+        fit: BoxFit.fill,
+        image: AssetImage(
+          backgroundImage,
+        ),
+      ),
       borderRadius: circular == null ? null : BorderRadius.circular(circular),
       boxShadow: boxShadow != null
           ? [
-              boxShadow,
-            ]
+        boxShadow,
+      ]
           : null,
       gradient: gradientColors != null
           ? LinearGradient(
-              begin: gradientAlign.first,
-              end: gradientAlign.last,
-              colors: gradientColors,
-            )
+        begin: gradientAlign.first,
+        end: gradientAlign.last,
+        colors: gradientColors,
+      )
           : null,
-      border: borderColor != null && borderColor != null
+      border: borderColor != null
           ? Border.all(color: borderColor, width: borderWidth)
           : null,
     ),
@@ -75,7 +75,7 @@ Container quickContainer({
 }
 
 Text quickText(String text, double size, Color color,
-    {FontWeight fontWeight, TextOverflow overflow, String fontFamily}) {
+    {FontWeight? fontWeight, TextOverflow? overflow, String? fontFamily}) {
   return Text(
     text,
     overflow: overflow,
@@ -89,11 +89,11 @@ Text quickText(String text, double size, Color color,
 }
 
 ButtonStyle buttonStyle(double fontSize, Color textColor,
-    {Color backgroundColor,
-    Color borderColor,
-    double borderWidth = 1,
-    FontWeight fontWeight,
-    shape}) {
+    {Color? backgroundColor,
+      Color? borderColor,
+      double borderWidth = 1,
+      FontWeight? fontWeight,
+      shape}) {
   return ButtonStyle(
     textStyle: MaterialStateProperty.all(
         TextStyle(fontSize: fontSize, fontWeight: fontWeight)),
@@ -101,23 +101,23 @@ ButtonStyle buttonStyle(double fontSize, Color textColor,
     backgroundColor: MaterialStateProperty.all(backgroundColor),
     side: borderColor != null
         ? MaterialStateProperty.all(
-            BorderSide(color: borderColor, width: borderWidth))
+        BorderSide(color: borderColor, width: borderWidth))
         : null,
     shape: MaterialStateProperty.all(shape ?? StadiumBorder()),
   );
 }
 
-RichText quickRichText(
-  List<String> strings,
-  List<TextStyle> textStyles,
-) {
+RichText? quickRichText(
+    List<String> strings,
+    List<TextStyle> textStyles,
+    ) {
   if (strings.length != textStyles.length) return null;
 
   return RichText(
     text: TextSpan(
       children: List.generate(
         strings.length,
-        (index) {
+            (index) {
           return TextSpan(
             text: strings[index],
             style: textStyles[index],
@@ -128,19 +128,19 @@ RichText quickRichText(
   );
 }
 
-RichText quickRichTextTap(
-  double fontSize,
-  List<String> strings,
-  List<Color> textColors,
-  List<VoidCallback> tapCallback,
-) {
+RichText? quickRichTextTap(
+    double fontSize,
+    List<String> strings,
+    List<Color> textColors,
+    List<VoidCallback> tapCallback,
+    ) {
   if (strings.length != textColors.length) return null;
 
   return RichText(
     text: TextSpan(
       children: List.generate(
         strings.length,
-        (index) {
+            (index) {
           return TextSpan(
             text: strings[index],
             style: TextStyle(
@@ -167,13 +167,13 @@ Color randomColor() {
       Random().nextInt(256) + 0, Random().nextInt(256) + 0);
 }
 
-Future<int> showActionSheet(
-  BuildContext context,
-  List<String> actionTitles, {
-  String title,
-  String message,
-  String cancelTitle = '取消',
-}) {
+Future<int?> showActionSheet(
+    BuildContext context,
+    List<String> actionTitles, {
+      String? title,
+      String? message,
+      String cancelTitle = '取消',
+    }) {
   return showCupertinoModalPopup(
       context: context,
       builder: (context) {
@@ -183,13 +183,13 @@ Future<int> showActionSheet(
           actions: actionTitles
               .map(
                 (e) => CupertinoActionSheetAction(
-                  child: Text(e),
-                  onPressed: () {
-                    Navigator.pop(context, actionTitles.indexOf(e));
-                  },
-                  isDefaultAction: true,
-                ),
-              )
+              child: Text(e),
+              onPressed: () {
+                Navigator.pop(context, actionTitles.indexOf(e));
+              },
+              isDefaultAction: true,
+            ),
+          )
               .toList(),
           cancelButton: CupertinoActionSheetAction(
             child: Text(cancelTitle),

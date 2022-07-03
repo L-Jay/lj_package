@@ -42,36 +42,36 @@ class CustomTabBarIndicator extends Decoration {
   final double height;
 
   /*宽度，不指定不生效*/
-  final double width;
+  final double? width;
 
   /*是否圆角*/
   final bool isRound;
 
   @override
-  Decoration lerpFrom(Decoration a, double t) {
+  Decoration? lerpFrom(Decoration? a, double t) {
     if (a is CustomTabBarIndicator) {
       return CustomTabBarIndicator(
         borderSide: BorderSide.lerp(a.borderSide, borderSide, t),
-        insets: EdgeInsetsGeometry.lerp(a.insets, insets, t),
+        insets: EdgeInsetsGeometry.lerp(a.insets, insets, t)!,
       );
     }
     return super.lerpFrom(a, t);
   }
 
   @override
-  Decoration lerpTo(Decoration b, double t) {
+  Decoration? lerpTo(Decoration? b, double t) {
     if (b is CustomTabBarIndicator) {
       return CustomTabBarIndicator(
         borderSide: BorderSide.lerp(borderSide, b.borderSide, t),
-        insets: EdgeInsetsGeometry.lerp(insets, b.insets, t),
+        insets: EdgeInsetsGeometry.lerp(insets, b.insets, t)!,
       );
     }
     return super.lerpTo(b, t);
   }
 
   @override
-  _UnderlinePainter createBoxPainter([ VoidCallback onChanged ]) {
-    return _UnderlinePainter(this, isRound, onChanged);
+  _UnderlinePainter createBoxPainter([ VoidCallback? onChanged ]) {
+    return _UnderlinePainter(this, isRound, onChanged!);
   }
 
   Rect _indicatorRectFor(Rect rect, TextDirection textDirection) {
@@ -81,8 +81,8 @@ class CustomTabBarIndicator extends Decoration {
 
     if (width != null) {
       double cw = (indicator.left + indicator.right)*0.5;
-      return Rect.fromLTWH(cw - width*0.5,
-          indicator.bottom - borderSide.width, width, borderSide.width);
+      return Rect.fromLTWH(cw - width!*0.5,
+          indicator.bottom - borderSide.width, width!, borderSide.width);
     }
 
     return Rect.fromLTWH(
@@ -112,8 +112,8 @@ class _UnderlinePainter extends BoxPainter {
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
     assert(configuration != null);
     assert(configuration.size != null);
-    final Rect rect = offset & configuration.size;
-    final TextDirection textDirection = configuration.textDirection;
+    final Rect rect = offset & configuration.size!;
+    final TextDirection textDirection = configuration.textDirection!;
     final Rect indicator = decoration._indicatorRectFor(rect, textDirection).deflate(decoration.borderSide.width / 2.0);
     final Paint paint = decoration.borderSide.toPaint()..strokeCap = isRound ? StrokeCap.round : StrokeCap.square;
     canvas.drawLine(indicator.bottomLeft, indicator.bottomRight, paint);

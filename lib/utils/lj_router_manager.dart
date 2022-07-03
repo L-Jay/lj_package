@@ -12,31 +12,32 @@ class RouterManager {
   static List verifyLoginPageList = [];
 
   /*全局pop callback，返回都会调用*/
-  static VoidCallback globalPopCallback;
+  static VoidCallback? globalPopCallback;
 
   /*获取登录状态*/
-  static bool Function() getLoginStatus;
+  static bool Function()? getLoginStatus;
 
-  static Future<bool> Function(BuildContext context) doLogin;
+  static Future<bool> Function(BuildContext context)? doLogin;
 
   static pushNamed<T>(
       BuildContext context,
       String routeName, {
-        Object arguments,
-        ObjectCallback<T> popCallback,
+        Object? arguments,
+        ObjectCallback<T>? popCallback,
       }) async {
-    if (verifyLoginPageList.contains(routeName) && !getLoginStatus()) {
-      bool loginResult = await doLogin(context);
-      if (loginResult != null && loginResult)
+    bool loginStatus = getLoginStatus?.call() as bool;
+    if (verifyLoginPageList.contains(routeName) && !loginStatus) {
+      bool? loginResult = await doLogin?.call(context);
+      if (loginResult == true)
         Navigator.pushNamed(context, routeName, arguments: arguments)
             .then((value) {
-          popCallback?.call(value);
+          popCallback?.call(value as T);
           globalPopCallback?.call();
         });
     } else {
       Navigator.pushNamed(context, routeName, arguments: arguments)
           .then((value) {
-        popCallback?.call(value);
+        popCallback?.call(value as T);
         globalPopCallback?.call();
       });
     }
@@ -44,22 +45,22 @@ class RouterManager {
 }
 
 extension StateArguments on State {
-  Object get argument {
-    return ModalRoute.of(this.context).settings.arguments;
+  Object? get argument {
+    return ModalRoute.of(this.context)?.settings.arguments;
   }
 
-  Map get argumentMap {
-    return ModalRoute.of(this.context).settings.arguments as Map;
+  Map? get argumentMap {
+    return ModalRoute.of(this.context)?.settings.arguments as Map;
   }
 }
 
 extension StatelessWidgetArguments on StatelessWidget {
-  Object argument(BuildContext context) {
-    return ModalRoute.of(context).settings.arguments;
+  Object? argument(BuildContext context) {
+    return ModalRoute.of(context)?.settings.arguments;
   }
 
-  Map argumentMap(BuildContext context) {
-    return ModalRoute.of(context).settings.arguments as Map;
+  Map? argumentMap(BuildContext context) {
+    return ModalRoute.of(context)?.settings.arguments as Map;
   }
 }
 

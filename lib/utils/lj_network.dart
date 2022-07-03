@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
@@ -21,7 +21,7 @@ enum LJNetworkStatus { wifi, mobile, none }
 
 class LJNetwork {
   /*baseUrl*/
-  static String baseUrl;
+  static late String baseUrl;
 
   /*headers*/
   static Map<String, dynamic> headers = {};
@@ -30,21 +30,18 @@ class LJNetwork {
   static Map<String, String> defaultParams = {};
 
   /*状态码key*/
-  static String codeKey;
+  static late String codeKey;
 
   /*请求成功状态码，默认200*/
   static int successCode = 200;
 
   /*状态描述key*/
-  static String messageKey;
+  static late String messageKey;
 
   /*捕获全部请求错误*/
-  static LJNetworkFailureCallback handleAllFailureCallBack;
+  static LJNetworkFailureCallback? handleAllFailureCallBack;
 
-  static LJNetworkJsonParse jsonParse;
-
-  /*全局CancelToken*/
-  static CancelToken _globalCancelToken = CancelToken();
+  static LJNetworkJsonParse? jsonParse;
 
   /*请求CancelToken Map*/
   static Map<String, CancelToken> _cancelTokens = Map();
@@ -88,7 +85,7 @@ class LJNetwork {
   }
 
   /*当前网络是否可用*/
-  static bool networkActive;
+  static bool? networkActive;
 
   static Map<dynamic, StreamSubscription> _networkStatusSubscriptionMap = Map();
 
@@ -133,10 +130,10 @@ class LJNetwork {
   path作为取消网络请求的标识，如果为空，使用全局取消cancelToken
   * */
   static Future<dynamic> get<T>(String path,
-      {Map<String, dynamic> params,
-      Map<String, dynamic> addHeaders,
-      LJNetworkSuccessCallback<T> successCallback,
-      LJNetworkFailureCallback failureCallback}) async {
+      {Map<String, dynamic>? params,
+      Map<String, dynamic>? addHeaders,
+      LJNetworkSuccessCallback<T>? successCallback,
+      LJNetworkFailureCallback? failureCallback}) async {
     return _request<T>(path,
         isGet: true,
         params: params,
@@ -151,11 +148,11 @@ class LJNetwork {
   path作为取消网络请求的标识，如果为空，使用全局取消cancelToken
   * */
   static Future<dynamic> post<T>(String path,
-      {Map<String, dynamic> params,
+      {Map<String, dynamic>? params,
       dynamic data,
-      Map<String, dynamic> addHeaders,
-      LJNetworkSuccessCallback<T> successCallback,
-      LJNetworkFailureCallback failureCallback}) async {
+      Map<String, dynamic>? addHeaders,
+      LJNetworkSuccessCallback<T>? successCallback,
+      LJNetworkFailureCallback? failureCallback}) async {
     return _request<T>(path,
         isPost: true,
         params: params,
@@ -166,11 +163,11 @@ class LJNetwork {
   }
 
   static Future<dynamic> put<T>(String path,
-      {Map<String, dynamic> params,
+      {Map<String, dynamic>? params,
       dynamic data,
-      Map<String, dynamic> addHeaders,
-      LJNetworkSuccessCallback<T> successCallback,
-      LJNetworkFailureCallback failureCallback}) async {
+      Map<String, dynamic>? addHeaders,
+      LJNetworkSuccessCallback<T>? successCallback,
+      LJNetworkFailureCallback? failureCallback}) async {
     return _request<T>(path,
         isPut: true,
         params: params,
@@ -186,11 +183,11 @@ class LJNetwork {
   path作为取消网络请求的标识，如果为空，使用全局取消cancelToken
   * */
   static Future<dynamic> delete<T>(String path,
-      {Map<String, dynamic> params,
+      {Map<String, dynamic>? params,
       dynamic data,
-      Map<String, dynamic> addHeaders,
-      LJNetworkSuccessCallback<T> successCallback,
-      LJNetworkFailureCallback failureCallback}) async {
+      Map<String, dynamic>? addHeaders,
+      LJNetworkSuccessCallback<T>? successCallback,
+      LJNetworkFailureCallback? failureCallback}) async {
     return _request<T>(
       path,
       params: params,
@@ -208,11 +205,11 @@ class LJNetwork {
     bool isGet = false,
     bool isDelete = false,
     bool isPut = false,
-    Map<String, dynamic> params,
+    Map<String, dynamic>? params,
     dynamic data,
-    Map<String, dynamic> addHeaders,
-    LJNetworkSuccessCallback<T> successCallback,
-    LJNetworkFailureCallback failureCallback,
+    Map<String, dynamic>? addHeaders,
+    LJNetworkSuccessCallback<T>? successCallback,
+    LJNetworkFailureCallback? failureCallback,
   }) async {
     // 未获取网络状态初次获取
     // if (networkActive == null) {
@@ -237,16 +234,12 @@ class LJNetwork {
       dio.options.headers = _headers;
 
       /*cancelToken*/
-      CancelToken cancelToken;
-      if (path != null) {
-        cancelToken = CancelToken();
-        _cancelTokens[path] = cancelToken;
-      } else {
-        cancelToken = _globalCancelToken;
-      }
+
+      CancelToken cancelToken = CancelToken();
+      _cancelTokens[path] = cancelToken;
 
       // request
-      Response response;
+      late Response response;
       if (isPost) {
         historyModel.method = 'post';
 
@@ -287,18 +280,18 @@ class LJNetwork {
       }
 
       if (kDebugMode) {
-        historyModel.title = path ?? baseUrl;
-        historyModel.url = response.realUri?.toString();
+        historyModel.title = path;
+        historyModel.url = response.realUri.toString();
         historyModel.headers = _headers;
         historyModel.params = params ?? (data is Map ? data : null);
-        historyModel.responseHeaders = response.headers?.map;
+        historyModel.responseHeaders = response.headers.map;
         historyModel.jsonResult = jsonEncode(response.data);
 
         historyList.insert(0, historyModel);
       }
 
       // 删除本次请求的cancelToken
-      _removeCancelToken(path);
+      _cancelTokens.remove(path);
 
       Map responseData = {};
       if (response.data is String)
@@ -313,7 +306,7 @@ class LJNetwork {
           successCallback?.call(response.data);
           completer.complete(response.data);
         } else {
-          T t = jsonParse<T>(response.data);
+          T t = jsonParse!<T>(response.data);
           successCallback?.call(t);
           completer.complete(t);
         }
@@ -330,12 +323,12 @@ class LJNetwork {
     } on DioError catch (error) {
       LJNetworkError finalError;
       int errorCode =
-          error.response?.data is Map ? error.response.data[codeKey] : null;
+      error.response?.data is Map ? error.response?.data[codeKey] : null;
       String message =
-          error.response?.data is Map ? error.response.data[messageKey] : null;
+          error.response?.data is Map ? error.response?.data[messageKey] : null;
 
       if (errorCode != null && message != null) {
-        historyModel.errorCode = errorCode?.toString();
+        historyModel.errorCode = errorCode.toString();
         historyModel.errorMsg = message;
 
         finalError = LJNetworkError(errorCode, message);
@@ -371,7 +364,7 @@ class LJNetwork {
 
         handleAllFailureCallBack?.call(finalError);
 
-        historyModel.responseHeaders = error.response?.headers?.map;
+        historyModel.responseHeaders = error.response?.headers.map;
         historyModel.errorCode = error.response?.statusCode?.toString();
         historyModel.errorMsg = error.response?.statusMessage;
 
@@ -385,10 +378,10 @@ class LJNetwork {
   }
 
   static Future download({
-    @required String url,
-    @required String savePath,
-    ProgressCallback onReceiveProgress,
-    Function error,
+    required String url,
+    required String savePath,
+    ProgressCallback? onReceiveProgress,
+    Function? error,
   }) {
     return dio
         .download(
@@ -397,36 +390,32 @@ class LJNetwork {
           onReceiveProgress: onReceiveProgress,
           options: Options(receiveTimeout: 5 * 60 * 1000),
         )
-        .catchError(error);
+        .catchError(error as Function);
   }
 
   /*
   取消请求
   path为空时，取消所有path为空的请求
   */
-  static cancel({String path}) {
-    CancelToken cancelToken;
+  static cancel({String? path}) {
+
     if (path != null) {
-      cancelToken = _cancelTokens[path];
-    } else {
-      cancelToken = _globalCancelToken;
-    }
-
-    if (cancelToken != null && !cancelToken.isCancelled) {
-      cancelToken.cancel();
-
-      _removeCancelToken(path);
-
-      if (kDebugMode) {
-        print(path != null ? '========取消请求$path' : '========取消所有没有path的请求');
-      }
-    }
-  }
-
-  /*删除path对应的cancelToken*/
-  static _removeCancelToken(String path) {
-    if (path != null) {
+      CancelToken? cancelToken = _cancelTokens[path];
+      cancelToken?.cancel();
       _cancelTokens.remove(path);
+      if (kDebugMode) {
+        print('========取消请求$path');
+      }
+    } else {
+      _cancelTokens.forEach((path, cancelToken) {
+        cancelToken.cancel();
+        if (kDebugMode) {
+          print('========取消请求$path');
+        }
+      });
+
+      print('========取消了所有请求========');
+      _cancelTokens.clear();
     }
   }
 
@@ -442,15 +431,15 @@ class LJNetworkError {
 }
 
 class NetworkHistoryModel {
-  String title;
-  String url;
-  String method;
-  Map headers;
-  Map params;
-  Map<String, List<String>> responseHeaders;
-  String jsonResult;
-  String errorCode;
-  String errorMsg;
+  String? title;
+  String? url;
+  String? method;
+  Map? headers;
+  Map? params;
+  Map<String, List<String>>? responseHeaders;
+  String? jsonResult;
+  String? errorCode;
+  String? errorMsg;
 
   @override
   String toString() {

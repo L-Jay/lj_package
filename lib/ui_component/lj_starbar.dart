@@ -4,15 +4,15 @@ class StarBar extends StatefulWidget {
   final int level;
   final int total;
   final String selectedImage;
-  final String defaultImage;
+  final String? defaultImage;
   final bool canSelect;
   final double margin;
-  final Function(int level) callback;
+  final Function(int level)? callback;
 
   const StarBar({
-    Key key,
-    @required this.level,
-    @required this.selectedImage,
+    Key? key,
+    required this.level,
+    required this.selectedImage,
     this.defaultImage,
     this.canSelect = false,
     this.margin = 10,
@@ -25,7 +25,7 @@ class StarBar extends StatefulWidget {
 }
 
 class _StarBarState extends State<StarBar> {
-  int _currentLevel;
+  late int _currentLevel;
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _StarBarState extends State<StarBar> {
     );
   }
 
-  Widget _imageItem(String name, int index) {
+  Widget _imageItem(String? name, int index) {
     return Padding(
       padding: EdgeInsets.only(
           right: name == null ||
@@ -69,8 +69,8 @@ class _StarBarState extends State<StarBar> {
                 if (widget.canSelect)
                   setState(() {
                     _currentLevel = index + 1;
-                    if (widget?.callback != null)
-                      widget.callback(_currentLevel);
+                    if (widget.callback != null)
+                      widget.callback!(_currentLevel);
                   });
               },
               child: Image.asset(name),

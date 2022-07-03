@@ -6,29 +6,28 @@ class GradientLinearProgressBar extends StatelessWidget {
   final double value; //进度值
   final Color backgroundColor; //进度条背景色
   final List<Color> colors; //渐变的颜色列表
+  final List<double>? stops;
 
   GradientLinearProgressBar(
       {this.strokeWidth = 2.0,
-      @required this.colors,
-      this.value,
+      required this.colors,
+      required this.value,
       this.backgroundColor = const Color(0xFFEEEEEE),
-      this.strokeCapRound = false});
+      this.strokeCapRound = false,
+      this.stops});
 
   @override
   Widget build(BuildContext context) {
-    var _colors = colors;
-    if (_colors == null) {
-      Color color = Theme.of(context).colorScheme.secondary;
-      _colors = [color, color];
-    }
     return CustomPaint(
       size: MediaQuery.of(context).size,
       painter: _GradientLinearProgressPainter(
-          strokeWidth: strokeWidth,
-          strokeCapRound: strokeCapRound,
-          backgroundColor: backgroundColor,
-          value: value,
-          colors: _colors),
+        strokeWidth: strokeWidth,
+        strokeCapRound: strokeCapRound,
+        backgroundColor: backgroundColor,
+        value: value,
+        colors: colors,
+        stops: stops,
+      ),
     );
   }
 }
@@ -39,12 +38,12 @@ class _GradientLinearProgressPainter extends CustomPainter {
   final double value;
   final Color backgroundColor;
   final List<Color> colors;
-  final List<double> stops;
+  final List<double>? stops;
   final p = Paint();
 
   _GradientLinearProgressPainter(
       {this.strokeWidth = 2.0,
-      @required this.colors,
+      required this.colors,
       this.value = 0.0,
       this.backgroundColor = const Color(0xFFEEEEEE),
       this.strokeCapRound = false,

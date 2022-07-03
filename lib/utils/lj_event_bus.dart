@@ -17,17 +17,17 @@ class EventBus {
 
   //添加订阅者
   void on(eventName, EventCallback f) {
-    if (eventName == null || f == null) return;
+    if (eventName == null) return;
     _eventMap[eventName] ??= <EventCallback>[];
-    _eventMap[eventName].add(f);
+    _eventMap[eventName]?.add(f);
   }
 
   //移除订阅者
-  void off(eventName, [EventCallback f]) {
+  void off(eventName, [EventCallback? f]) {
     var list = _eventMap[eventName];
     if (eventName == null || list == null) return;
     if (f == null) {
-      _eventMap[eventName] = null;
+      _eventMap[eventName]?.clear();
     } else {
       list.remove(f);
     }

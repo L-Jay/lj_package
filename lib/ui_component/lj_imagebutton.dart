@@ -14,9 +14,9 @@ enum ImageButtonState {
 
 class ImageButton extends StatefulWidget {
   ImageButton({
-    Key key,
-    @required this.imageChild,
-    @required this.textChild,
+    Key? key,
+    required this.imageChild,
+    required this.textChild,
     this.padding,
     this.width,
     this.height,
@@ -40,32 +40,32 @@ class ImageButton extends StatefulWidget {
     this.imageAnimationEnd,
     this.forwardOrReverseValueNotifier,
     this.imageTextAlign = ImageTextAlign.center,
-  });
+  }) : super(key: key);
 
-  final EdgeInsets padding;
-  final BoxDecoration decoration;
-  final double width;
-  final double height;
-  final Alignment alignment;
+  final EdgeInsets? padding;
+  final BoxDecoration? decoration;
+  final double? width;
+  final double? height;
+  final Alignment? alignment;
   final Widget textChild;
   final Widget imageChild;
-  final Color backgroundColor;
-  final Widget highlightImageChild;
-  final Widget highlightTextChild;
-  final Color highlightBackgroundColor;
-  final Widget selectedImageChild;
-  final Widget selectedTextChild;
-  final Color selectedBackgroundColor;
-  final Widget disableImageChild;
-  final Widget disableTextChild;
-  final Color disableBackgroundColor;
-  final double spaceMargin;
+  final Color? backgroundColor;
+  final Widget? highlightImageChild;
+  final Widget? highlightTextChild;
+  final Color? highlightBackgroundColor;
+  final Widget? selectedImageChild;
+  final Widget? selectedTextChild;
+  final Color? selectedBackgroundColor;
+  final Widget? disableImageChild;
+  final Widget? disableTextChild;
+  final Color? disableBackgroundColor;
+  final double? spaceMargin;
   final ImageButtonPosition position;
   final ImageButtonState state;
-  final GestureTapCallback onTap;
-  final double imageAnimationBegin;
-  final double imageAnimationEnd;
-  final ValueNotifier<bool> forwardOrReverseValueNotifier;
+  final GestureTapCallback? onTap;
+  final double? imageAnimationBegin;
+  final double? imageAnimationEnd;
+  final ValueNotifier<bool>? forwardOrReverseValueNotifier;
   final ImageTextAlign imageTextAlign;
 
   @override
@@ -74,12 +74,12 @@ class ImageButton extends StatefulWidget {
 
 class _ImageButtonState extends State<ImageButton>
     with SingleTickerProviderStateMixin {
-  ImageButtonState _state;
-  ImageButtonState _lastState;
+  late ImageButtonState _state;
+  late ImageButtonState _lastState;
 
-  AnimationController _animationController;
-  Animation _animation;
-  ValueNotifier<bool> _valueNotifier;
+  AnimationController? _animationController;
+  Animation<double>? _animation;
+  late ValueNotifier<bool> _valueNotifier;
 
   @override
   void initState() {
@@ -95,13 +95,13 @@ class _ImageButtonState extends State<ImageButton>
           duration: Duration(milliseconds: 300), vsync: this);
       _animation = Tween(
           begin: widget.imageAnimationBegin, end: widget.imageAnimationEnd)
-          .animate(_animationController);
+          .animate(_animationController!);
 
       _valueNotifier.addListener(() {
         setState(() {
           _valueNotifier.value ?
-          _animationController.forward() :
-          _animationController.reverse();
+          _animationController?.forward() :
+          _animationController?.reverse();
         });
       });
     }
@@ -123,7 +123,7 @@ class _ImageButtonState extends State<ImageButton>
 
   @override
   Widget build(BuildContext context) {
-    Color _backgroundColor;
+    Color? _backgroundColor;
     Widget _textChild;
     Widget _imageChild;
 
@@ -155,7 +155,7 @@ class _ImageButtonState extends State<ImageButton>
 
     if (_animationController != null) {
       _imageChild = RotationTransition(
-        turns: _animation,
+        turns: _animation!,
         child: _imageChild,
       );
     }

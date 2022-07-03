@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lj_package/debug/lj_debug_config.dart';
@@ -40,14 +40,14 @@ class _HomePageState extends State<HomePage> {
   _config() async {
     await LJUtil.initInstance();
 
-    LJNetwork.baseUrl = 'http://apis.juhe.cn';
-    LJNetwork.codeKey = 'error_code';
-    LJNetwork.successCode = 0;
-    LJNetwork.messageKey = 'reason';
-    LJNetwork.handleAllFailureCallBack = (error) {};
-    LJNetwork.jsonParse = <T>(data) {
-      return data;
-    };
+    // LJNetwork.baseUrl = 'http://apis.juhe.cn';
+    // LJNetwork.codeKey = 'error_code';
+    // LJNetwork.successCode = 0;
+    // LJNetwork.messageKey = 'reason';
+    // LJNetwork.handleAllFailureCallBack = (error) {};
+    // LJNetwork.jsonParse = <T>(data) {
+    //   return data;
+    // };
 
     LJDebugConfig.debugState = kDebugMode;
     LJDebugConfig.configList = [
@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
       //push.key = LJDebugConfig.configList[LJDebugConfig.debugIndex]['pushKey'];
     };
 
-    LJDebugConfig.addOverlay(context, 'Debug');
+    LJDebugConfig.addOverlay(context);
   }
 
   @override

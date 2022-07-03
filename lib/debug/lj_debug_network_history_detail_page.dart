@@ -2,13 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_json_widget/flutter_json_widget.dart';
 import 'package:lj_package/utils/lj_network.dart';
+
+import 'lj_json_widget.dart';
 
 class DebugNetworkHistoryDetailPage extends StatefulWidget {
   final NetworkHistoryModel historyModel;
 
-  const DebugNetworkHistoryDetailPage({Key key, this.historyModel})
+  const DebugNetworkHistoryDetailPage({Key? key, required this.historyModel})
       : super(key: key);
 
   @override
@@ -23,7 +24,7 @@ class _DebugNetworkHistoryDetailPageState
     return Scaffold(
       backgroundColor: Color(0xFFF7F8F9),
       appBar: AppBar(
-        title: Text(widget.historyModel.title),
+        title: Text(widget.historyModel.title ?? ''),
         actions: [
           IconButton(
               icon: Icon(
@@ -45,7 +46,7 @@ class _DebugNetworkHistoryDetailPageState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.historyModel.url,
+                  widget.historyModel.url ?? '',
                   style: TextStyle(
                     color: Color(0xFF1BA3FF),
                     fontSize: 15,
@@ -57,7 +58,7 @@ class _DebugNetworkHistoryDetailPageState
                   color: Color(0xFF717171),
                 ),
                 Text(
-                  widget.historyModel.method,
+                  widget.historyModel.method ?? '',
                   style: TextStyle(
                     color: Color(0xFF1BA3FF),
                     fontSize: 15,
@@ -68,31 +69,32 @@ class _DebugNetworkHistoryDetailPageState
                   margin: EdgeInsets.symmetric(vertical: 8.0),
                   color: Color(0xFF717171),
                 ),
-                ...mapWidget(widget.historyModel.headers),
+                ...mapWidget(widget.historyModel.headers ?? {}),
                 Container(
                   height: 1,
                   margin: EdgeInsets.symmetric(vertical: 8.0),
                   color: Color(0xFF717171),
                 ),
-                ...mapWidget(widget.historyModel.params),
+                ...mapWidget(widget.historyModel.params ?? {}),
                 Container(
                   height: 1,
                   margin: EdgeInsets.symmetric(vertical: 8.0),
                   color: Color(0xFF717171),
                 ),
-                ...mapWidget(widget.historyModel.responseHeaders),
+                ...mapWidget(widget.historyModel.responseHeaders ?? {}),
                 Container(
                   height: 1,
                   margin: EdgeInsets.symmetric(vertical: 8.0),
                   color: Color(0xFF717171),
                 ),
                 if (widget.historyModel.errorCode == null)
-                  JsonViewerWidget(jsonDecode(widget.historyModel.jsonResult)),
+                  LJJsonViewerWidget(
+                      jsonDecode(widget.historyModel.jsonResult ?? '')),
                 if (widget.historyModel.errorCode != null)
                   Text(
-                    widget.historyModel.errorCode +
+                    (widget.historyModel.errorCode ?? '') +
                         '   ' +
-                        widget.historyModel.errorMsg,
+                        (widget.historyModel.errorMsg ?? ''),
                     style: TextStyle(
                       color: Color(0xFF1BA3FF),
                       fontSize: 15,
@@ -108,7 +110,7 @@ class _DebugNetworkHistoryDetailPageState
 
   List<Widget> mapWidget(Map map) {
     List<Widget> headerWidget = [];
-    map?.forEach((key, value) {
+    map.forEach((key, value) {
       headerWidget.add(
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),

@@ -56,7 +56,7 @@ class _DebugNetworkHistoryPageState extends State<DebugNetworkHistoryPage> {
               children: [
                 Expanded(
                   child: Text(
-                    model.title,
+                    model.title ?? '',
                     style: TextStyle(
                       color: Color(0xFF1BA3FF),
                       fontSize: 15,
@@ -67,7 +67,7 @@ class _DebugNetworkHistoryPageState extends State<DebugNetworkHistoryPage> {
                   width: 10,
                 ),
                 Text(
-                  model.method,
+                  model.method ?? '',
                   style: TextStyle(
                     color: Color(0xFF1BA3FF),
                     fontSize: 15,

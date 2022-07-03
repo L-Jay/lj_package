@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class LJWebViewPage extends StatefulWidget {
@@ -11,18 +10,15 @@ class LJWebViewPage extends StatefulWidget {
   LJWebViewPage(this.url);
 
   @override
-  _LJWebViewPageState createState() => _LJWebViewPageState(url);
+  _LJWebViewPageState createState() => _LJWebViewPageState();
 }
 
 class _LJWebViewPageState extends State<LJWebViewPage> {
-  String _url;
-  String _title;
-  bool _canBack = false;
-  bool _canForward = false;
+  String? _title;
+  bool? _canBack = false;
+  bool? _canForward = false;
 
-  _LJWebViewPageState(this._url);
-
-  WebViewController _webViewController;
+  WebViewController? _webViewController;
 
   String toUtf8(String headHTML) {
     return Uri.dataFromString(headHTML,
@@ -34,7 +30,7 @@ class _LJWebViewPageState extends State<LJWebViewPage> {
 
   Widget _webView() {
     return WebView(
-      initialUrl: _url,
+      initialUrl: widget.url,
       javascriptMode: JavascriptMode.unrestricted,
       gestureNavigationEnabled: true,
       onWebViewCreated: (controller) {
@@ -47,21 +43,20 @@ class _LJWebViewPageState extends State<LJWebViewPage> {
       onPageFinished: (String url) async {
         // Utils.dismissLoading();
         print('完成加载$url');
-        _title = await _webViewController.getTitle();
-        _canBack = await _webViewController.canGoBack();
-        _canForward = await _webViewController.canGoForward();
+        _title = await _webViewController?.getTitle();
+        _canBack = await _webViewController?.canGoBack();
+        _canForward = await _webViewController?.canGoForward();
 
         setState(() {});
       },
       onWebResourceError: (WebResourceError error) {
         // Utils.dismissLoading();
-        print('加载失败' + error.failingUrl + error.description);
+        print('加载失败' + error.failingUrl! + error.description);
       },
       navigationDelegate: (NavigationRequest request) async {
         String url = request.url;
-        if (url != null &&
-            !(url.startsWith("http:") || url.startsWith("https:"))) {
-          await launch(url); //use url launcher plugin
+        if (!(url.startsWith("http:") || url.startsWith("https:"))) {
+          await launchUrl(Uri.parse(url)); //use url launcher plugin
           return NavigationDecision.prevent;
         }
         return NavigationDecision.navigate;

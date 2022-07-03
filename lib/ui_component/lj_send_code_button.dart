@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class SendCodeButton extends StatefulWidget {
   final TextEditingController controller;
-  final double radius;
+  final double? radius;
   final double width;
   final double height;
   final double fontSize;
@@ -16,13 +16,13 @@ class SendCodeButton extends StatefulWidget {
   final Future<bool> Function() sendCodeMethod;
 
   const SendCodeButton({
-    Key key,
-    @required this.controller,
-    @required this.radius,
-    @required this.width,
-    @required this.height,
-    @required this.fontSize,
-    @required this.sendCodeMethod,
+    Key? key,
+    required this.controller,
+    this.radius,
+    required this.width,
+    required this.height,
+    required this.fontSize,
+    required this.sendCodeMethod,
     this.isShowBorder = true,
     this.enable = false,
     this.second = 60,
@@ -37,9 +37,9 @@ class SendCodeButton extends StatefulWidget {
 class _SendCodeButtonState extends State<SendCodeButton> {
   String get phone => widget.controller.text;
 
-  Timer timer;
+  Timer? timer;
 
-  bool enable;
+  late bool enable;
 
   @override
   void initState() {
@@ -84,7 +84,7 @@ class _SendCodeButtonState extends State<SendCodeButton> {
         width: widget.width,
         height: widget.height,
         decoration: BoxDecoration(
-          borderRadius: widget.radius == null ? null : BorderRadius.circular(widget.radius),
+          borderRadius: widget.radius == null ? null : BorderRadius.circular(widget.radius!),
           border: widget.isShowBorder
               ? Border.all(
                   color: enable ? widget.enableColor : widget.disableColor,
@@ -93,7 +93,7 @@ class _SendCodeButtonState extends State<SendCodeButton> {
         ),
         child: Text(
           timer?.isActive ?? false
-              ? "${(widget.second - timer.tick)}s后重试"
+              ? "${(widget.second - timer!.tick)}s后重试"
               : "发送验证码",
           style: TextStyle(
             color: enable ? widget.enableColor : widget.disableColor,

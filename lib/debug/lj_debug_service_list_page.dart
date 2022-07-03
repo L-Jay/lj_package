@@ -40,13 +40,13 @@ class _DebugServiceListPageState extends State<DebugServiceListPage> {
     return ListView.separated(
       itemCount: LJDebugConfig.configList?.length ?? 0,
       itemBuilder: (BuildContext context, int index) {
-        Map service = LJDebugConfig.configList[index];
+        Map<String, String> service = LJDebugConfig.configList![index];
 
         return GestureDetector(
           onTap: () {
             LJDebugConfig.debugIndex = index;
             if (LJDebugConfig.debugServiceChangeCallback != null)
-              LJDebugConfig.debugServiceChangeCallback(index, service);
+              LJDebugConfig.debugServiceChangeCallback!(index, service);
             setState(() {});
           },
           child: Container(
@@ -64,9 +64,9 @@ class _DebugServiceListPageState extends State<DebugServiceListPage> {
                             Container(
                                 padding: EdgeInsets.only(bottom: 10),
                                 child: quickRichText([
-                                  key ?? '',
+                                  key,
                                   '：',
-                                  value ?? '',
+                                  value,
                                 ], [
                                   TextStyle(
                                       color: Color(0xFF333333),
