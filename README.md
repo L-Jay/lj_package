@@ -1,6 +1,6 @@
 # lj_package
 
-lj_package包含网络请求组件、页面跳转路由管理组件、Event Bus等常用函数和类扩展；轮播图、官改tabbar(修改官方滑动抖动问题)、验证码button封装、网络图片缓存、Webview等常用自定义UI组件。
+lj_package包含网络请求组件、页面跳转路由管理组件、Event Bus等常用函数和类扩展；轮播图、官改tabbar(修改官方滑动抖动问题)、验证码button封装、密码输入框、网络图片缓存、Webview等常用自定义UI组件。
 
 ## 添加依赖
 ```yaml
@@ -294,6 +294,7 @@ LJDebugConfig.addOverlay(context, 'Debug');
 |   lj_extensions   |  String扩展、State扩展    |
 |   lj_permission   |  权限管理封装    |
 |   lj_custom_ui    |  自定义UI    |
+|   lj_password_bar    |  密码输入框    |
 |  lj_imagebutton   |  自定义Button    |
 |  lj_linear_progress_bar   |  直线进度条    |
 |  lj_slivertabbardelegate   |  SliverPersistentHeader delegate封装    |
