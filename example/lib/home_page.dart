@@ -1,8 +1,8 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lj_package/debug/lj_debug_config.dart';
 import 'package:lj_package/lj_package.dart';
+import 'package:lj_package/ui_component/lj_password_bar.dart';
 import 'package:lj_package/ui_component/lj_webview_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -88,11 +88,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: LJSwiper(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            LJSwiper(
               viewModels: imageList,
               fit: BoxFit.fitWidth,
               getImgUrl: (ImageModel model) {
@@ -107,31 +107,36 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
-          ),
-          TextButton(
-            onPressed: () {
-              LJNetwork.post('/xzqh/query', params: {
-                'key': 'b0f6256515bfc7ae93ab3a48835bf91d',
-                'fid': '',
-              }, successCallback: (data) {
-                print(data);
-              }, failureCallback: (error) {
-                print(error);
-              });
-            },
-            child: quickText('回调模式post request', 20, Colors.blue),
-          ),
-          TextButton(
-            onPressed: () async {
-              var map = await LJNetwork.post('/xzqh/query', params: {
-                'key': 'b0f6256515bfc7ae93ab3a48835bf91d',
-                'fid': '',
-              });
-              print(map);
-            },
-            child: quickText('await模式post request', 20, Colors.blue),
-          ),
-        ],
+            TextButton(
+              onPressed: () {
+                LJNetwork.post('/xzqh/query', params: {
+                  'key': 'b0f6256515bfc7ae93ab3a48835bf91d',
+                  'fid': '',
+                }, successCallback: (data) {
+                  print(data);
+                }, failureCallback: (error) {
+                  print(error);
+                });
+              },
+              child: quickText('回调模式post request', 20, Colors.blue),
+            ),
+            TextButton(
+              onPressed: () async {
+                var map = await LJNetwork.post('/xzqh/query', params: {
+                  'key': 'b0f6256515bfc7ae93ab3a48835bf91d',
+                  'fid': '',
+                });
+                print(map);
+              },
+              child: quickText('await模式post request', 20, Colors.blue),
+            ),
+            LJPasswordBar(
+              width: 60,
+              borderColor: Colors.orange,
+              // type: LJPasswordBarType.line,
+            ),
+          ],
+        ),
       ),
     );
   }

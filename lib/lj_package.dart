@@ -4,6 +4,7 @@ export 'ui_component/lj_custom_ui.dart';
 export 'ui_component/lj_imagebutton.dart';
 export 'ui_component/lj_linear_progress_bar.dart';
 export 'ui_component/lj_network_image.dart';
+export 'ui_component/lj_password_bar.dart';
 export 'ui_component/lj_send_code_button.dart';
 export 'ui_component/lj_slivertabbardelegate.dart';
 export 'ui_component/lj_starbar.dart';
