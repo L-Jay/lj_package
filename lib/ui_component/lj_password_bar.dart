@@ -71,13 +71,9 @@ class _LJPasswordBarState extends State<LJPasswordBar> {
 
   @override
   Widget build(BuildContext context) {
-    double surplus =
-        MediaQuery.of(context).size.width - widget.length * widget.width;
-    double space = surplus > 0 ? surplus * 0.2 : 0;
-
     return Stack(
       children: [
-        _buildGridView(space),
+        _buildGridView(),
         _buildInput(),
       ],
     );
@@ -123,7 +119,11 @@ class _LJPasswordBarState extends State<LJPasswordBar> {
     );
   }
 
-  GridView _buildGridView(double space) {
+  GridView _buildGridView() {
+    double surplus =
+        MediaQuery.of(context).size.width - widget.length * widget.width;
+    double space = surplus > 0 ? surplus * 0.2 : 10;
+
     return GridView.builder(
       itemCount: widget.length,
       shrinkWrap: true,
@@ -138,7 +138,7 @@ class _LJPasswordBarState extends State<LJPasswordBar> {
         return Container(
           width: widget.width,
           height: widget.width,
-          padding: const EdgeInsets.only(left: 3, bottom: 6),
+          padding: const EdgeInsets.only(left: 3, bottom: 3),
           decoration: BoxDecoration(
             border: widget.type == LJPasswordBarType.box
                 ? Border.all(

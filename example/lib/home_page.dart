@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
               child: quickText('await模式post request', 20, Colors.blue),
             ),
             LJPasswordBar(
-              width: 60,
+              width: 50,
               borderColor: Colors.orange,
               // type: LJPasswordBarType.line,
             ),
