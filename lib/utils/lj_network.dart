@@ -302,7 +302,7 @@ class LJNetwork {
 
       /*请求数据成功*/
       if (code == null || code == successCode) {
-        if (T == dynamic) {
+        if (T == dynamic || T.toString().contains('?')) {
           successCallback?.call(response.data);
           completer.complete(response.data);
         } else {

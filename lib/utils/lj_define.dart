@@ -79,6 +79,7 @@ Text quickText(String text, double size, Color color,
   return Text(
     text,
     overflow: overflow,
+    maxLines: overflow == null ? null : 1,
     style: TextStyle(
       fontSize: size,
       color: color,

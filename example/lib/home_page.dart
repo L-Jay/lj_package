@@ -6,7 +6,7 @@ import 'package:lj_package/ui_component/lj_password_bar.dart';
 import 'package:lj_package/ui_component/lj_webview_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -40,14 +40,14 @@ class _HomePageState extends State<HomePage> {
   _config() async {
     await LJUtil.initInstance();
 
-    // LJNetwork.baseUrl = 'http://apis.juhe.cn';
-    // LJNetwork.codeKey = 'error_code';
-    // LJNetwork.successCode = 0;
-    // LJNetwork.messageKey = 'reason';
-    // LJNetwork.handleAllFailureCallBack = (error) {};
-    // LJNetwork.jsonParse = <T>(data) {
-    //   return data;
-    // };
+    LJNetwork.baseUrl = 'http://apis.juhe.cn';
+    LJNetwork.codeKey = 'error_code';
+    LJNetwork.successCode = 0;
+    LJNetwork.messageKey = 'reason';
+    LJNetwork.handleAllFailureCallBack = (error) {};
+    LJNetwork.jsonParse = <T>(data) {
+      return data;
+    };
 
     LJDebugConfig.debugState = kDebugMode;
     LJDebugConfig.configList = [
@@ -76,8 +76,8 @@ class _HomePageState extends State<HomePage> {
       //   logout();
       // }
       LJUtil.preferences.setInt('debugIndex', debugIndex);
-      LJNetwork.baseUrl =
-          LJDebugConfig.configList[LJDebugConfig.debugIndex]['baseUrl'];
+      // LJNetwork.baseUrl =
+      //     LJDebugConfig.configList[LJDebugConfig.debugIndex]['baseUrl'];
       //push.key = LJDebugConfig.configList[LJDebugConfig.debugIndex]['pushKey'];
     };
 
@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
             ),
             LJPasswordBar(
               width: 50,
-              borderColor: Colors.orange,
+              borderColor: Colors.orange, editComplete: (String code) {},
               // type: LJPasswordBarType.line,
             ),
           ],
