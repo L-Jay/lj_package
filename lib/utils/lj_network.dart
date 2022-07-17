@@ -20,8 +20,15 @@ typedef LJNetworkStatusCallback = void Function(LJNetworkStatus status);
 enum LJNetworkStatus { wifi, mobile, none }
 
 class LJNetwork {
+  static final Dio dio = _createDio();
+
   /*baseUrl*/
-  static late String baseUrl;
+  static late String _baseUrl;
+  static set baseUrl(url) {
+    _baseUrl = url;
+    dio.options.baseUrl = url;
+  }
+  static String get baseUrl => _baseUrl;
 
   /*headers*/
   static Map<String, dynamic> headers = {};
@@ -45,8 +52,6 @@ class LJNetwork {
 
   /*请求CancelToken Map*/
   static Map<String, CancelToken> _cancelTokens = Map();
-
-  static final Dio dio = _createDio();
 
   static Dio _createDio() {
     Dio dio = Dio(BaseOptions(
@@ -83,6 +88,8 @@ class LJNetwork {
 
     return dio;
   }
+
+
 
   /*当前网络是否可用*/
   static bool? networkActive;

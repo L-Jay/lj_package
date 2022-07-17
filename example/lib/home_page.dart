@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lj_package/debug/lj_debug_config.dart';
 import 'package:lj_package/lj_package.dart';
-import 'package:lj_package/ui_component/lj_password_bar.dart';
 import 'package:lj_package/ui_component/lj_webview_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -40,7 +38,33 @@ class _HomePageState extends State<HomePage> {
   _config() async {
     await LJUtil.initInstance();
 
-    LJNetwork.baseUrl = 'http://apis.juhe.cn';
+    LJDebugConfig.configList = [
+      {
+        'title': '正式',
+        'baseUrl': 'http://apis.juhe.cn',
+        'pushKey': 'product_xxxxx',
+        'wechat': 'product_xxxxx',
+      },
+      {
+        'title': '测试',
+        'baseUrl': 'https://www.test.com',
+        'pushKey': 'test_xxxxx',
+        'wechat': 'product_xxxxx',
+      },
+    ];
+
+    LJDebugConfig.serviceChangeCallback = (map) async {
+      // 切换环境重新登录
+      // if (isLogin) {
+      //   logout();
+      // }
+
+      LJNetwork.baseUrl = map['baseUrl'] ?? '';
+      //push.key = map['pushKey'];
+    };
+
+    LJDebugConfig.addOverlay(context);
+
     LJNetwork.codeKey = 'error_code';
     LJNetwork.successCode = 0;
     LJNetwork.messageKey = 'reason';
@@ -48,40 +72,6 @@ class _HomePageState extends State<HomePage> {
     LJNetwork.jsonParse = <T>(data) {
       return data;
     };
-
-    LJDebugConfig.debugState = kDebugMode;
-    LJDebugConfig.configList = [
-      {
-        'title': '正式',
-        'baseUrl': 'https://www.product.com',
-        'pushKey': 'product_xxxxx'
-      },
-      {
-        'title': '测试',
-        'baseUrl': 'https://www.test.com',
-        'pushKey': 'test_xxxxx'
-      },
-    ];
-
-    if (LJDebugConfig.debugState) {
-      //测试环境
-      LJDebugConfig.debugIndex = LJUtil.preferences.getInt('debugIndex') ?? 1;
-    } else {
-      //正式环境
-      LJDebugConfig.debugIndex = 0;
-    }
-
-    LJDebugConfig.debugServiceChangeCallback = (debugIndex, map) async {
-      // if (isLogin) {
-      //   logout();
-      // }
-      LJUtil.preferences.setInt('debugIndex', debugIndex);
-      // LJNetwork.baseUrl =
-      //     LJDebugConfig.configList[LJDebugConfig.debugIndex]['baseUrl'];
-      //push.key = LJDebugConfig.configList[LJDebugConfig.debugIndex]['pushKey'];
-    };
-
-    LJDebugConfig.addOverlay(context);
   }
 
   @override
