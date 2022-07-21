@@ -49,23 +49,23 @@ Container quickContainer({
       image: backgroundImage == null
           ? null
           : DecorationImage(
-        fit: BoxFit.fill,
-        image: AssetImage(
-          backgroundImage,
-        ),
-      ),
+              fit: BoxFit.fill,
+              image: AssetImage(
+                backgroundImage,
+              ),
+            ),
       borderRadius: circular == null ? null : BorderRadius.circular(circular),
       boxShadow: boxShadow != null
           ? [
-        boxShadow,
-      ]
+              boxShadow,
+            ]
           : null,
       gradient: gradientColors != null
           ? LinearGradient(
-        begin: gradientAlign.first,
-        end: gradientAlign.last,
-        colors: gradientColors,
-      )
+              begin: gradientAlign.first,
+              end: gradientAlign.last,
+              colors: gradientColors,
+            )
           : null,
       border: borderColor != null
           ? Border.all(color: borderColor, width: borderWidth)
@@ -74,8 +74,14 @@ Container quickContainer({
   );
 }
 
-Text quickText(String text, double size, Color color,
-    {FontWeight? fontWeight, TextOverflow? overflow, String? fontFamily}) {
+Text quickText(
+  String text,
+  double size,
+  Color color, {
+  FontWeight? fontWeight,
+  TextOverflow? overflow,
+  String? fontFamily,
+}) {
   return Text(
     text,
     overflow: overflow,
@@ -89,12 +95,49 @@ Text quickText(String text, double size, Color color,
   );
 }
 
+TextButton quickButton({
+  required String text,
+  required Color backgroundColor,
+  required VoidCallback onPressed,
+  double fontSize = 17,
+  Color fontColor = Colors.white,
+}) {
+  return TextButton(
+    onPressed: onPressed,
+    child: Text(text),
+    style: buttonStyle(fontSize, fontColor),
+  );
+}
+
+Widget gradientButton({
+  required String text,
+  required List<Color> gradientColors,
+  required VoidCallback onPressed,
+  double fontSize = 17,
+  Color textColor = Colors.white,
+  double? width,
+  double? height,
+  double? circular,
+}) {
+  return quickContainer(
+    width: width,
+    height: height,
+    circular: circular,
+    gradientColors: gradientColors,
+    child: quickButton(
+      text: text,
+      backgroundColor: Colors.transparent,
+      onPressed: onPressed,
+    ),
+  );
+}
+
 ButtonStyle buttonStyle(double fontSize, Color textColor,
     {Color? backgroundColor,
-      Color? borderColor,
-      double borderWidth = 1,
-      FontWeight? fontWeight,
-      shape}) {
+    Color? borderColor,
+    double borderWidth = 1,
+    FontWeight? fontWeight,
+    shape}) {
   return ButtonStyle(
     textStyle: MaterialStateProperty.all(
         TextStyle(fontSize: fontSize, fontWeight: fontWeight)),
@@ -102,23 +145,23 @@ ButtonStyle buttonStyle(double fontSize, Color textColor,
     backgroundColor: MaterialStateProperty.all(backgroundColor),
     side: borderColor != null
         ? MaterialStateProperty.all(
-        BorderSide(color: borderColor, width: borderWidth))
+            BorderSide(color: borderColor, width: borderWidth))
         : null,
     shape: MaterialStateProperty.all(shape ?? StadiumBorder()),
   );
 }
 
 RichText? quickRichText(
-    List<String> strings,
-    List<TextStyle> textStyles,
-    ) {
+  List<String> strings,
+  List<TextStyle> textStyles,
+) {
   if (strings.length != textStyles.length) return null;
 
   return RichText(
     text: TextSpan(
       children: List.generate(
         strings.length,
-            (index) {
+        (index) {
           return TextSpan(
             text: strings[index],
             style: textStyles[index],
@@ -130,18 +173,18 @@ RichText? quickRichText(
 }
 
 RichText? quickRichTextTap(
-    double fontSize,
-    List<String> strings,
-    List<Color> textColors,
-    List<VoidCallback> tapCallback,
-    ) {
+  double fontSize,
+  List<String> strings,
+  List<Color> textColors,
+  List<VoidCallback> tapCallback,
+) {
   if (strings.length != textColors.length) return null;
 
   return RichText(
     text: TextSpan(
       children: List.generate(
         strings.length,
-            (index) {
+        (index) {
           return TextSpan(
             text: strings[index],
             style: TextStyle(
@@ -169,12 +212,12 @@ Color randomColor() {
 }
 
 Future<int?> showActionSheet(
-    BuildContext context,
-    List<String> actionTitles, {
-      String? title,
-      String? message,
-      String cancelTitle = '取消',
-    }) {
+  BuildContext context,
+  List<String> actionTitles, {
+  String? title,
+  String? message,
+  String cancelTitle = '取消',
+}) {
   return showCupertinoModalPopup(
       context: context,
       builder: (context) {
@@ -184,13 +227,13 @@ Future<int?> showActionSheet(
           actions: actionTitles
               .map(
                 (e) => CupertinoActionSheetAction(
-              child: Text(e),
-              onPressed: () {
-                Navigator.pop(context, actionTitles.indexOf(e));
-              },
-              isDefaultAction: true,
-            ),
-          )
+                  child: Text(e),
+                  onPressed: () {
+                    Navigator.pop(context, actionTitles.indexOf(e));
+                  },
+                  isDefaultAction: true,
+                ),
+              )
               .toList(),
           cancelButton: CupertinoActionSheetAction(
             child: Text(cancelTitle),
