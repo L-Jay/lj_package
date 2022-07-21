@@ -24,10 +24,12 @@ class LJNetwork {
 
   /*baseUrl*/
   static late String _baseUrl;
+
   static set baseUrl(url) {
     _baseUrl = url;
     dio.options.baseUrl = url;
   }
+
   static String get baseUrl => _baseUrl;
 
   /*headers*/
@@ -52,6 +54,18 @@ class LJNetwork {
 
   /*请求CancelToken Map*/
   static Map<String, CancelToken> _cancelTokens = Map();
+
+  /*拦截请求参数，可对参数进行处理并返回给原位置*/
+  static Map<String, dynamic> Function(
+      String path, Map<String, dynamic>? requestParams)? handleRequestParams;
+
+  /*拦截响应体，此拦截只有请求成功（status code为200~299）的情况下响应*/
+  static Map<String, dynamic> Function(
+      String path, Map<String, dynamic> responseData)? handleResponseData;
+
+  /*模拟响应，直接阻断真实网络请求并返回数据*/
+  static Future<Map<String, dynamic>> Function(
+      String path, Map<String, dynamic>? requestParams)? mockResponse;
 
   static Dio _createDio() {
     Dio dio = Dio(BaseOptions(
@@ -88,8 +102,6 @@ class LJNetwork {
 
     return dio;
   }
-
-
 
   /*当前网络是否可用*/
   static bool? networkActive;
@@ -156,7 +168,7 @@ class LJNetwork {
   * */
   static Future<dynamic> post<T>(String path,
       {Map<String, dynamic>? params,
-      dynamic data,
+      Map<String, dynamic>? data,
       Map<String, dynamic>? addHeaders,
       LJNetworkSuccessCallback<T>? successCallback,
       LJNetworkFailureCallback? failureCallback}) async {
@@ -171,7 +183,7 @@ class LJNetwork {
 
   static Future<dynamic> put<T>(String path,
       {Map<String, dynamic>? params,
-      dynamic data,
+      Map<String, dynamic>? data,
       Map<String, dynamic>? addHeaders,
       LJNetworkSuccessCallback<T>? successCallback,
       LJNetworkFailureCallback? failureCallback}) async {
@@ -191,14 +203,13 @@ class LJNetwork {
   * */
   static Future<dynamic> delete<T>(String path,
       {Map<String, dynamic>? params,
-      dynamic data,
       Map<String, dynamic>? addHeaders,
       LJNetworkSuccessCallback<T>? successCallback,
       LJNetworkFailureCallback? failureCallback}) async {
     return _request<T>(
       path,
       params: params,
-      data: data,
+      data: null,
       isDelete: true,
       addHeaders: addHeaders,
       successCallback: successCallback,
@@ -213,7 +224,7 @@ class LJNetwork {
     bool isDelete = false,
     bool isPut = false,
     Map<String, dynamic>? params,
-    dynamic data,
+    Map<String, dynamic>? data,
     Map<String, dynamic>? addHeaders,
     LJNetworkSuccessCallback<T>? successCallback,
     LJNetworkFailureCallback? failureCallback,
@@ -240,14 +251,39 @@ class LJNetwork {
       if (addHeaders != null) _headers.addAll(addHeaders);
       dio.options.headers = _headers;
 
-      /*cancelToken*/
+      /*添加默认请求参数*/
+      if (isGet || isDelete) {
+        params?.addAll(defaultParams);
 
+        /*拦截请求参数*/
+        if (handleRequestParams != null) {
+          params = handleRequestParams!(path, params);
+        }
+      }else {
+        data?.addAll(defaultParams);
+
+        /*拦截请求参数*/
+        if (handleRequestParams != null) {
+          data = handleRequestParams!(path, data);
+        }
+      }
+
+      /*cancelToken*/
       CancelToken cancelToken = CancelToken();
       _cancelTokens[path] = cancelToken;
 
       // request
       late Response response;
-      if (isPost) {
+      if (mockResponse != null) {
+        Map<String, dynamic> responseData =
+            await mockResponse!(path, data ?? params);
+        response = Response(
+          requestOptions: RequestOptions(path: path),
+          data: responseData,
+          statusCode: 200,
+          statusMessage: '$path模拟请求成功',
+        );
+      } else if (isPost) {
         historyModel.method = 'post';
 
         response = await dio.post(
@@ -256,8 +292,15 @@ class LJNetwork {
           data: data,
           cancelToken: cancelToken,
         );
-      }
-      if (isPut) {
+      } else if (isGet) {
+        historyModel.method = 'get';
+
+        response = await dio.get(
+          path,
+          queryParameters: params,
+          cancelToken: cancelToken,
+        );
+      } else if (isPut) {
         historyModel.method = 'put';
 
         response = await dio.put(
@@ -266,20 +309,10 @@ class LJNetwork {
           data: data,
           cancelToken: cancelToken,
         );
-      }
-      if (isDelete) {
+      } else if (isDelete) {
         historyModel.method = 'delete';
 
         response = await dio.delete(
-          path,
-          queryParameters: params,
-          cancelToken: cancelToken,
-        );
-      }
-      if (isGet) {
-        historyModel.method = 'get';
-
-        response = await dio.get(
           path,
           queryParameters: params,
           cancelToken: cancelToken,
@@ -300,6 +333,10 @@ class LJNetwork {
       // 删除本次请求的cancelToken
       _cancelTokens.remove(path);
 
+      if (handleResponseData != null) {
+        response.data = handleResponseData!(path, response.data);
+      }
+
       Map responseData = {};
       if (response.data is String)
         responseData = jsonDecode(response.data);
@@ -313,9 +350,15 @@ class LJNetwork {
           successCallback?.call(response.data);
           completer.complete(response.data);
         } else {
-          T t = jsonParse!<T>(response.data);
-          successCallback?.call(t);
-          completer.complete(t);
+          if (jsonParse != null) {
+            T t = jsonParse!<T>(response.data);
+
+            successCallback?.call(t);
+            completer.complete(t);
+          } else {
+            successCallback?.call(response.data);
+            completer.complete(response.data);
+          }
         }
       } else {
         /*请求数据发生错误*/
@@ -330,7 +373,7 @@ class LJNetwork {
     } on DioError catch (error) {
       LJNetworkError finalError;
       int errorCode =
-      error.response?.data is Map ? error.response?.data[codeKey] : null;
+          error.response?.data is Map ? error.response?.data[codeKey] : null;
       String message =
           error.response?.data is Map ? error.response?.data[messageKey] : null;
 
@@ -405,7 +448,6 @@ class LJNetwork {
   path为空时，取消所有path为空的请求
   */
   static cancel({String? path}) {
-
     if (path != null) {
       CancelToken? cancelToken = _cancelTokens[path];
       cancelToken?.cancel();
