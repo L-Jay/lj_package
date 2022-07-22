@@ -7,8 +7,8 @@ class LJNetworkImage extends StatelessWidget {
   final double radius;
 
   final String url;
-  final String? placeholderImageName;
-  final Color? placeholderColor;
+  final Widget? placeholderWidget;
+  final Widget? errorWidget;
 
   final BoxFit fit;
 
@@ -17,11 +17,19 @@ class LJNetworkImage extends StatelessWidget {
     this.width,
     this.height,
     required this.url,
-    this.placeholderImageName,
-    this.placeholderColor,
+    this.placeholderWidget,
+    this.errorWidget,
     this.radius = 0,
     this.fit = BoxFit.cover,
   }) : super(key: key);
+
+  static Widget defaultPlaceholderWidget = Container(
+    color: Color(0xFFF5F6F6),
+  );
+
+  static Widget defaultErrorWidget = Container(
+    color: Color(0xFFF5F6F6),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -33,24 +41,10 @@ class LJNetworkImage extends StatelessWidget {
         width: width,
         height: height,
         placeholder: (context, url) {
-          return placeholderImageName == null
-              ? Container(
-            color: placeholderColor ?? Color(0xFFF5F6F6),
-          )
-              : Image.asset(
-            placeholderImageName!,
-            fit: fit,
-          );
+          return placeholderWidget ?? defaultPlaceholderWidget;
         },
         errorWidget: (context, url, dynamic error) {
-          return placeholderImageName == null
-              ? Container(
-            color: placeholderColor ?? Color(0xFFF5F6F6),
-          )
-              : Image.asset(
-            placeholderImageName!,
-            fit: fit,
-          );
+          return errorWidget ?? defaultErrorWidget;
         },
       ),
     );
