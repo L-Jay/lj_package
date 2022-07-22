@@ -55,17 +55,31 @@ class LJNetwork {
   /*请求CancelToken Map*/
   static Map<String, CancelToken> _cancelTokens = Map();
 
-  /*拦截请求参数，可对参数进行处理并返回给原位置*/
+  /*
+  拦截请求参数，可对参数进行处理并返回给原位置
+  path:请求路径
+  requestParams：请求参数
+  */
   static Map<String, dynamic> Function(
       String path, Map<String, dynamic>? requestParams)? handleRequestParams;
 
-  /*拦截响应体，此拦截只有请求成功（status code为200~299）的情况下响应*/
+  /*
+  拦截响应体，此拦截只有请求成功（status code为200~299）的情况下响应
+  path:请求路径
+  responseData：原始data
+  */
   static Map<String, dynamic> Function(
       String path, Map<String, dynamic> responseData)? handleResponseData;
 
-  /*模拟响应，直接阻断真实网络请求并返回数据*/
+  /*
+  模拟响应，直接阻断真实网络请求并返回数据
+  path:请求路径
+  requestParams：请求参数，可以判断请求参数返回对应的响应体
+  */
   static Future<Map<String, dynamic>> Function(
       String path, Map<String, dynamic>? requestParams)? mockResponse;
+  /*需要mock的请求路径数组*/
+  static List<String> mockPathList = [];
 
   static Dio _createDio() {
     Dio dio = Dio(BaseOptions(
@@ -274,7 +288,7 @@ class LJNetwork {
 
       // request
       late Response response;
-      if (mockResponse != null) {
+      if (kDebugMode && mockResponse != null && mockPathList.contains(path)) {
         Map<String, dynamic> responseData =
             await mockResponse!(path, data ?? params);
         response = Response(
